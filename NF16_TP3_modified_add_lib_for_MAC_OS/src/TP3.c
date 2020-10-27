@@ -201,7 +201,36 @@ void affichage_RendezVous(T_RendezVous *rendezVous){
  * @return un pointeur vers l’instance.
  */
 T_Ordonnancement* creerInstance(char* filename){
-    return provided_creerInstance(filename);
+    
+   /* T_Ordonnancement* monOrdonnancement;
+    FILE *fptxt;
+    int i=0;
+    fptxt=fopen(fichier,"r");
+    if (fptxt==NULL)
+    {
+        printf("erreur lecture fichier");
+    }
+    else
+    {
+    fscanf(fptxt,"%s\n%d\n",uneTrace->comment,&uneTrace->nbpts);
+    for (i = 0; i < uneTrace->nbpts; i++)
+    {
+        fscanf(fptxt,"%f %f\n",&uneTrace->time[i],&uneTrace->value[i]);
+
+    }
+    fclose(fptxt); */
+   // }
+    //return provided_creerInstance(filename);
+
+    /*typedef struct Ordonnancement{
+    // la date de création d'un ordonnancement, en forme "AAAA-MM-JJ".
+    char* date;
+    // une liste de soigneurs.
+    T_Soigneur*listeSoigneurs;
+    // une liste de patients.
+    T_Patient *listePatients;
+} T_Ordonnancement;*/
+
 }
 
 /**
@@ -241,6 +270,90 @@ void exportSolution(T_Ordonnancement* solution, char* filename){
  * @brief un menu principal pour le programme.
  */
 void menuPrincipal(void){
-//    printf("hello world\n");
-    return provided_menu();
+
+
+    T_Patient* listepatients;
+    listepatients=malloc(sizeof(T_Patient));
+    ajouterPatient(listepatients,7, "Viera", "Baptiste");
+    ajouterPatient(listepatients,2, "Dupont", "Pierre");
+    
+
+    T_Soigneur* listeSoigneurs;
+    listeSoigneurs=malloc(sizeof(T_Soigneur));
+    ajouterSoigneur(listeSoigneurs,007, "Legrand", "Jonathan");
+    ajouterSoigneur(listeSoigneurs,123, "Vincent", "Remi");
+
+
+    T_RendezVous* listeRdV;
+    listeRdV = malloc(sizeof(T_RendezVous));
+    ajouterRendezVous(listeRdV,7,12,13,15,"Petit checkup du main");
+
+    int choix;
+
+    do
+   {
+
+     /* affichage menu */
+     printf("=================================================================================");
+     printf("\nBienvenu au menu principal d'une application d'ordonnancement médicale\n");
+     printf("=================================================================================");
+
+     printf("\n1: Créer une instance à partir d’un fichier\n"
+             "2: Afficher tous les patients et leurs rendez-vous\n"
+             "3: Afficher tous les soigneurs et leurs intervalles de temps disponibles\n"
+             "4: Afficher un rendez-vous en indiquant l’identifiant du patient et le soigneur correspondant\n"
+             "5: Modifier un rendez-vous en indiquant l’identifiant du patient et celui du soigneur correspondant\n"
+             "6: Supprimer un rendez-vous en indiquant l’identifiant du patient et celui du soigneur correspondant\n"
+             "7: Ordonnancer\n"
+             "8: Exporter la solution d’un ordonnancement\n"
+             "9: Quitter\n");
+ 
+      fflush(stdin);
+      printf("\nVotre choix ? ");
+      scanf("%d",&choix);
+ 
+      switch(choix)
+      {
+         case 1:
+            break;
+ 
+         case 2:
+            affichage_Patients(listepatients);
+            break;
+ 
+         case 3:
+            affichage_Soigneurs(listeSoigneurs);
+            break;
+ 
+         case 4:
+            //affichage_RendezVous()
+            break;
+        
+        case 5:
+            // Création d'un fichier binaire qui contient l'ensemble des voitures du parc
+            /*printf("Quel est le nom du fichier binaire qui contiendra votre parc de voitures? " );
+            scanf("%s",nomfileparc); 
+            saveParc(nomfileparc, voitures,n); */
+            break;
+        
+        case 6:
+        //
+            break;
+
+        case 7:
+            break;
+
+        case 8:
+            break;
+        
+        case 9:
+            break;        
+
+        default:
+            printf("Choix erroné\n");
+      }
+   }while(choix!=9);
+
+
+    //return provided_menu();
 }
