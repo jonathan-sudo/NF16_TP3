@@ -52,7 +52,7 @@ T_Patient* ajouterPatient(T_Patient* listePatients, Index_Patient idPat, char* n
  */
 T_RendezVous* ajouterRendezVous(T_RendezVous* listeRdV, Index_Soigneur idSoi, Time dateDebutSouhaitee, Time dateFinSouhaitee, Time tempsDeplacement, char* desc){
     /*T_RendezVous* rendezvous;
-    rendezvous = malloc(sizeof(T_RendezVous));
+rend:tabezvous = malloc(sizeof(T_RendezVous));
     rendezvous -> id_soi = idSoi;
     rendezvous -> debut_souhaitee = dateDebutSouhaitee;
     rendezvous -> fin_souhaitee = dateFinSouhaitee;

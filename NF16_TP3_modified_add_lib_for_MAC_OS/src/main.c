@@ -11,6 +11,9 @@ int main(void) {
     fflush(stdin);
     ajouterPatient(listepatients,7, "Viera", "Baptiste");
     ajouterPatient(listepatients,2, "Dupont", "Pierre");
+    T_RendezVous* listeRdV;
+    listeRdV = malloc(sizeof(T_Patient));
+    ajouterRendezVous(listeRdV,7,12,13,15,"Petit checkup du main");
 
 
     int choix;
@@ -48,6 +51,7 @@ int main(void) {
             break;
  
          case 4:
+            //affichage_RendezVous()
             break;
         
         case 5:
