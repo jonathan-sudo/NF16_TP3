@@ -62,10 +62,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/jonathanl/Documents/NF16_TP3_modified_add_lib_for_MAC_OS
+CMAKE_SOURCE_DIR = /home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/jonathanl/Documents/NF16_TP3_modified_add_lib_for_MAC_OS
+CMAKE_BINARY_DIR = /home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS
 
 # Include any dependencies generated for this target.
 include CMakeFiles/TP3.dir/depend.make
@@ -78,29 +78,29 @@ include CMakeFiles/TP3.dir/flags.make
 
 CMakeFiles/TP3.dir/src/TP3.c.o: CMakeFiles/TP3.dir/flags.make
 CMakeFiles/TP3.dir/src/TP3.c.o: src/TP3.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jonathanl/Documents/NF16_TP3_modified_add_lib_for_MAC_OS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/TP3.dir/src/TP3.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/TP3.dir/src/TP3.c.o -c /home/jonathanl/Documents/NF16_TP3_modified_add_lib_for_MAC_OS/src/TP3.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/TP3.dir/src/TP3.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/TP3.dir/src/TP3.c.o -c /home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/src/TP3.c
 
 CMakeFiles/TP3.dir/src/TP3.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/TP3.dir/src/TP3.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/jonathanl/Documents/NF16_TP3_modified_add_lib_for_MAC_OS/src/TP3.c > CMakeFiles/TP3.dir/src/TP3.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/src/TP3.c > CMakeFiles/TP3.dir/src/TP3.c.i
 
 CMakeFiles/TP3.dir/src/TP3.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/TP3.dir/src/TP3.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/jonathanl/Documents/NF16_TP3_modified_add_lib_for_MAC_OS/src/TP3.c -o CMakeFiles/TP3.dir/src/TP3.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/src/TP3.c -o CMakeFiles/TP3.dir/src/TP3.c.s
 
 CMakeFiles/TP3.dir/src/main.c.o: CMakeFiles/TP3.dir/flags.make
 CMakeFiles/TP3.dir/src/main.c.o: src/main.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jonathanl/Documents/NF16_TP3_modified_add_lib_for_MAC_OS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/TP3.dir/src/main.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/TP3.dir/src/main.c.o -c /home/jonathanl/Documents/NF16_TP3_modified_add_lib_for_MAC_OS/src/main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/TP3.dir/src/main.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/TP3.dir/src/main.c.o -c /home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/src/main.c
 
 CMakeFiles/TP3.dir/src/main.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/TP3.dir/src/main.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/jonathanl/Documents/NF16_TP3_modified_add_lib_for_MAC_OS/src/main.c > CMakeFiles/TP3.dir/src/main.c.i
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/src/main.c > CMakeFiles/TP3.dir/src/main.c.i
 
 CMakeFiles/TP3.dir/src/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/TP3.dir/src/main.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/jonathanl/Documents/NF16_TP3_modified_add_lib_for_MAC_OS/src/main.c -o CMakeFiles/TP3.dir/src/main.c.s
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/src/main.c -o CMakeFiles/TP3.dir/src/main.c.s
 
 # Object files for target TP3
 TP3_OBJECTS = \
@@ -115,7 +115,7 @@ bin/TP3: CMakeFiles/TP3.dir/src/main.c.o
 bin/TP3: CMakeFiles/TP3.dir/build.make
 bin/TP3: lib/libTP3_provided.so
 bin/TP3: CMakeFiles/TP3.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jonathanl/Documents/NF16_TP3_modified_add_lib_for_MAC_OS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable bin/TP3"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable bin/TP3"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/TP3.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -128,6 +128,6 @@ CMakeFiles/TP3.dir/clean:
 .PHONY : CMakeFiles/TP3.dir/clean
 
 CMakeFiles/TP3.dir/depend:
-	cd /home/jonathanl/Documents/NF16_TP3_modified_add_lib_for_MAC_OS && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/jonathanl/Documents/NF16_TP3_modified_add_lib_for_MAC_OS /home/jonathanl/Documents/NF16_TP3_modified_add_lib_for_MAC_OS /home/jonathanl/Documents/NF16_TP3_modified_add_lib_for_MAC_OS /home/jonathanl/Documents/NF16_TP3_modified_add_lib_for_MAC_OS /home/jonathanl/Documents/NF16_TP3_modified_add_lib_for_MAC_OS/CMakeFiles/TP3.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS /home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS /home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS /home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS /home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/CMakeFiles/TP3.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/TP3.dir/depend
 
