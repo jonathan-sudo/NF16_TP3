@@ -8,9 +8,12 @@ int main(void) {
 
     T_Patient* listepatients;
     listepatients=malloc(sizeof(T_Patient));
-    fflush(stdin);
+    T_Soigneur* listeSoigneurs;
+    listeSoigneurs=malloc(sizeof(T_Soigneur));
     ajouterPatient(listepatients,7, "Viera", "Baptiste");
     ajouterPatient(listepatients,2, "Dupont", "Pierre");
+    ajouterSoigneur(listeSoigneurs,007, "Legrand", "Jonathan");
+    ajouterSoigneur(listeSoigneurs,123, "Vincent", "Remi");
     T_RendezVous* listeRdV;
     listeRdV = malloc(sizeof(T_RendezVous));
     ajouterRendezVous(listeRdV,7,12,13,15,"Petit checkup du main");
@@ -47,7 +50,7 @@ int main(void) {
             break;
  
          case 3:
-
+            affichage_Soigneurs(listeSoigneurs);
             break;
  
          case 4:
