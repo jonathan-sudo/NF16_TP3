@@ -1,4 +1,4 @@
-# Install script for directory: /home/baptiste/UTC/NF16/TP3/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS
+# Install script for directory: /home/baptiste/UTC/NF16/TP3/TP3 GIT/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/baptiste/UTC/NF16/TP3/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/baptiste/UTC/NF16/TP3/TP3 GIT/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
