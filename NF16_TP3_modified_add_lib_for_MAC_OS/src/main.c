@@ -12,7 +12,7 @@ int main(void) {
     ajouterPatient(listepatients,7, "Viera", "Baptiste");
     ajouterPatient(listepatients,2, "Dupont", "Pierre");
     T_RendezVous* listeRdV;
-    listeRdV = malloc(sizeof(T_Patient));
+    listeRdV = malloc(sizeof(T_RendezVous));
     ajouterRendezVous(listeRdV,7,12,13,15,"Petit checkup du main");
 
 
