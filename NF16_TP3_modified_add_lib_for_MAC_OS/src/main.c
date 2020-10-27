@@ -9,8 +9,8 @@ int main(void) {
     T_Patient* listepatients;
    
     fflush(stdin);
-    ajouterPatient(listepatients,7, "Viera", "Baptiste");
-    ajouterPatient(listepatients,2, "Dupont", "Pierre");
+    //ajouterPatient(listepatients,7, "Viera", "Baptiste");
+    //ajouterPatient(listepatients,2, "Dupont", "Pierre");
 
 
     int choix;
@@ -20,7 +20,7 @@ int main(void) {
 
       /* affichage menu */
         printf("\n---------------MENU---------------\n");
-      printf("\n1: Créer une instance à partir d’un fichier\n"
+      printf("\n1: Créer une instance à partir d’un         fichier\n"
              "2: Afficher tous les patients et leurs rendez-vous\n"
              "3: Afficher tous les soigneurs et leurs intervalles de temps disponibles\n"
              "4: Afficher un rendez-vous en indiquant l’identifiant du patient et le soigneur correspondant\n"
@@ -40,7 +40,7 @@ int main(void) {
             break;
  
          case 2:
-            //affichage_Patients(listepatients);
+            /*affichage_Patients(listepatients);*/
             break;
  
          case 3:
