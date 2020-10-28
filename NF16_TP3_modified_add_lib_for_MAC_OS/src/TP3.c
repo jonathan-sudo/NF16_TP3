@@ -202,36 +202,41 @@ void affichage_RendezVous(T_RendezVous *rendezVous){
  */
 T_Ordonnancement* creerInstance(char* filename){
     
-   /* T_Ordonnancement* monOrdonnancement;
+    T_Ordonnancement* monOrdonnancement;
+    monOrdonnancement = malloc(sizeof(T_Ordonnancement));
     FILE *fptxt;
-    int i=0;
-    fptxt=fopen(fichier,"r");
+    fptxt=fopen(filename,"r");
+    int nbPatient =0;
+    int nbSoignant = 0;
+    int nbRdv =0;
     if (fptxt==NULL)
     {
         printf("erreur lecture fichier");
     }
     else
     {
-    fscanf(fptxt,"%s\n%d\n",uneTrace->comment,&uneTrace->nbpts);
-    for (i = 0; i < uneTrace->nbpts; i++)
-    {
-        fscanf(fptxt,"%f %f\n",&uneTrace->time[i],&uneTrace->value[i]);
-
+        fscanf(fptxt,"%d %d\n",&nbPatient,&nbSoignant);
+        for (int i = 0; i < nbPatient; i++)
+        {
+            fscanf(fptxt,"%d %d %s %s\n",&monOrdonnancement->listePatients->id_pat,&nbRdv,monOrdonnancement->listePatients->nom,monOrdonnancement->listePatients->prenom);
+            for (int j = 0; j < nbRdv; j++)
+            {
+                fscanf(fptxt,"%d %d %d %d %s\n",&monOrdonnancement->listePatients->listeRendezVous->id_soi,&monOrdonnancement->listePatients->listeRendezVous->debut_souhaitee,&monOrdonnancement->listePatients->listeRendezVous->fin_souhaitee,&monOrdonnancement->listePatients->listeRendezVous->temps_deplacement,monOrdonnancement->listePatients->listeRendezVous->desc);
+            }
+        }
+        for (int k = 0; k < nbSoignant; k++)
+        {
+            fscanf(fptxt,"%d %s %s\n",&monOrdonnancement->listeSoigneurs->id_soi,monOrdonnancement->listeSoigneurs->nom,monOrdonnancement->listeSoigneurs->prenom);
+        }
+    
+    fclose(fptxt);
     }
-    fclose(fptxt); */
-   // }
+    return monOrdonnancement;
     //return provided_creerInstance(filename);
 
-    /*typedef struct Ordonnancement{
-    // la date de création d'un ordonnancement, en forme "AAAA-MM-JJ".
-    char* date;
-    // une liste de soigneurs.
-    T_Soigneur*listeSoigneurs;
-    // une liste de patients.
-    T_Patient *listePatients;
-} T_Ordonnancement;*/
-
 }
+
+
 
 /**
  * @brief Affectation d’un rendez-vous en fonction des intervalles de temps disponibles d’un soigneur
@@ -272,21 +277,24 @@ void exportSolution(T_Ordonnancement* solution, char* filename){
 void menuPrincipal(void){
 
 
-    T_Patient* listepatients;
-    listepatients=malloc(sizeof(T_Patient));
-    ajouterPatient(listepatients,7, "Viera", "Baptiste");
-    ajouterPatient(listepatients,2, "Dupont", "Pierre");
+    T_Patient* listePatients;
+    listePatients=malloc(sizeof(T_Patient));
+    //ajouterPatient(listePatients,7, "Viera", "Baptiste");
+    //ajouterPatient(listePatients,2, "Dupont", "Pierre");
     
 
     T_Soigneur* listeSoigneurs;
     listeSoigneurs=malloc(sizeof(T_Soigneur));
-    ajouterSoigneur(listeSoigneurs,007, "Legrand", "Jonathan");
-    ajouterSoigneur(listeSoigneurs,123, "Vincent", "Remi");
+    //ajouterSoigneur(listeSoigneurs,007, "Legrand", "Jonathan");
+    //ajouterSoigneur(listeSoigneurs,123, "Vincent", "Remi");
 
 
-    T_RendezVous* listeRdV;
-    listeRdV = malloc(sizeof(T_RendezVous));
-    ajouterRendezVous(listeRdV,7,12,13,15,"Petit checkup du main");
+    T_RendezVous* listeRendezVous;
+    listeRendezVous = malloc(sizeof(T_RendezVous));
+    //ajouterRendezVous(listeRendezVous,7,12,13,15,"Petit checkup du main");
+
+    T_Ordonnancement* unOrdonnancement = malloc(sizeof(T_Ordonnancement));
+    char nomFichier[20];
 
     int choix;
 
@@ -315,10 +323,19 @@ void menuPrincipal(void){
       switch(choix)
       {
          case 1:
+            printf(" Veuillez saisir le nom du fichier d'une instance ");
+            /*scanf("%s",nomFichier);
+            if (!(strcmp(nomFichier,"instance1.txt"))&&(!strcmp(nomFichier,"instance2.txt")))
+            {
+                printf("Le fichier %s n'existe pas! Continuer? [y] n: ",nomFichier);
+                exit(0);
+            }*/
+            unOrdonnancement = creerInstance("instance1.txt");
+            
             break;
  
          case 2:
-            affichage_Patients(listepatients);
+            affichage_Patients(listePatients);
             break;
  
          case 3:
