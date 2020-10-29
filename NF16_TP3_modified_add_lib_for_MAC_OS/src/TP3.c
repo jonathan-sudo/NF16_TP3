@@ -156,7 +156,26 @@ T_RendezVous* supprimerRendezVous(T_RendezVous* listeRdV, Index_Soigneur idSoi){
  * @param listeSoigneurs une liste de soigneurs.
  */
 void affichage_Soigneurs(T_Soigneur* listeSoigneurs){
-    return provided_affichage_Soigneurs(listeSoigneurs);
+    T_Soigneur* SoigneurEnCours;
+    T_RendezVous* listeRdv=NULL;
+    SoigneurEnCours = listeSoigneurs;
+    while (SoigneurEnCours!=NULL)
+    {
+        printf("ID soigneur: %d\n",SoigneurEnCours->id_soi);
+        printf("Nom: %s\n",SoigneurEnCours->nom);
+        printf("Prenom: %s\n",SoigneurEnCours->prenom);
+/*         listeRdv = SoigneurEnCours->listeRendezVous;
+ *         if (listeRdv!=NULL)
+ *         {
+ *             printf("Date de début affectée en minutes: %d\n ",listeRdv->debut_affectee);
+ *             printf("Date de fin affectée en minutes: %d\n",listeRdv->fin_affectee);
+ *             printf("ID soignant: %d\n",listeRdv->id_soi);
+ *         }
+ */
+        SoigneurEnCours=SoigneurEnCours->suivant;
+        printf("\n");
+    }
+
 }
 
 /**
@@ -165,7 +184,7 @@ void affichage_Soigneurs(T_Soigneur* listeSoigneurs){
  */
 void affichage_Patients(T_Patient* listePatients){
     
-    /*T_Patient* PatientEnCours;
+   T_Patient* PatientEnCours;
    T_RendezVous* listeRdv=NULL;
    PatientEnCours = listePatients;
    while (PatientEnCours!=NULL)
@@ -182,9 +201,9 @@ void affichage_Patients(T_Patient* listePatients){
        }
        PatientEnCours=PatientEnCours->suivant;
        printf("\n");
-   }*/
+   }
     
-    return provided_affichage_Patients(listePatients);
+    //return provided_affichage_Patients(listePatients);
 }
 
 /**
@@ -279,19 +298,19 @@ void menuPrincipal(void){
 
     T_Patient* listePatients;
     listePatients=malloc(sizeof(T_Patient));
-    //ajouterPatient(listePatients,7, "Viera", "Baptiste");
-    //ajouterPatient(listePatients,2, "Dupont", "Pierre");
+    ajouterPatient(listePatients,7, "Viera", "Baptiste");
+    ajouterPatient(listePatients,2, "Dupont", "Pierre");
     
 
     T_Soigneur* listeSoigneurs;
     listeSoigneurs=malloc(sizeof(T_Soigneur));
-    //ajouterSoigneur(listeSoigneurs,007, "Legrand", "Jonathan");
-    //ajouterSoigneur(listeSoigneurs,123, "Vincent", "Remi");
+    ajouterSoigneur(listeSoigneurs,007, "Legrand", "Jonathan");
+    ajouterSoigneur(listeSoigneurs,123, "Vincent", "Remi");
 
 
     T_RendezVous* listeRendezVous;
     listeRendezVous = malloc(sizeof(T_RendezVous));
-    //ajouterRendezVous(listeRendezVous,7,12,13,15,"Petit checkup du main");
+    ajouterRendezVous(listeRendezVous,7,12,13,15,"Petit checkup du main");
 
     T_Ordonnancement* unOrdonnancement = malloc(sizeof(T_Ordonnancement));
     char nomFichier[20];
@@ -303,7 +322,7 @@ void menuPrincipal(void){
 
      /* affichage menu */
      printf("=================================================================================");
-     printf("\nBienvenu au menu principal d'une application d'ordonnancement médicale\n");
+     printf("\nBienvenu au menu principal d'une application d'ordonnancement médical\n");
      printf("=================================================================================");
 
      printf("\n1: Créer une instance à partir d’un fichier\n"
