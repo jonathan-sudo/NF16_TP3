@@ -223,6 +223,21 @@ T_Ordonnancement* creerInstance(char* filename){
     
     T_Ordonnancement* monOrdonnancement;
     monOrdonnancement = malloc(sizeof(T_Ordonnancement));
+
+    T_Patient* listePatients;
+    listePatients=malloc(sizeof(T_Patient));
+
+    T_Soigneur* listeSoigneurs;
+    listeSoigneurs=malloc(sizeof(T_Soigneur));
+
+    T_RendezVous* listeRendezVous;
+    listeRendezVous = malloc(sizeof(T_RendezVous));
+
+    monOrdonnancement->listePatients=listePatients;
+    monOrdonnancement->listeSoigneurs=listeSoigneurs;
+    monOrdonnancement->listePatients->listeRendezVous=listeRendezVous;
+
+
     FILE *fptxt;
     fptxt=fopen(filename,"r");
     int nbPatient =0;
@@ -235,17 +250,30 @@ T_Ordonnancement* creerInstance(char* filename){
     else
     {
         fscanf(fptxt,"%d %d\n",&nbPatient,&nbSoignant);
+        printf("%d %d\n",nbPatient,nbSoignant);
         for (int i = 0; i < nbPatient; i++)
         {
-            fscanf(fptxt,"%d %d %s %s\n",&monOrdonnancement->listePatients->id_pat,&nbRdv,monOrdonnancement->listePatients->nom,monOrdonnancement->listePatients->prenom);
+            fscanf(fptxt,"%u %d %s %s\n",&monOrdonnancement->listePatients->id_pat,&nbRdv,monOrdonnancement->listePatients->nom,monOrdonnancement->listePatients->prenom);
+            printf("%u %d %s %s\n",monOrdonnancement->listePatients->id_pat,nbRdv,monOrdonnancement->listePatients->nom,monOrdonnancement->listePatients->prenom);
             for (int j = 0; j < nbRdv; j++)
             {
                 fscanf(fptxt,"%d %d %d %d %s\n",&monOrdonnancement->listePatients->listeRendezVous->id_soi,&monOrdonnancement->listePatients->listeRendezVous->debut_souhaitee,&monOrdonnancement->listePatients->listeRendezVous->fin_souhaitee,&monOrdonnancement->listePatients->listeRendezVous->temps_deplacement,monOrdonnancement->listePatients->listeRendezVous->desc);
+                printf("%d %d %d %d %s\n",monOrdonnancement->listePatients->listeRendezVous->id_soi,monOrdonnancement->listePatients->listeRendezVous->debut_souhaitee,monOrdonnancement->listePatients->listeRendezVous->fin_souhaitee,monOrdonnancement->listePatients->listeRendezVous->temps_deplacement,monOrdonnancement->listePatients->listeRendezVous->desc);
+                monOrdonnancement->listePatients->suivant=listePatients->suivant;
+                monOrdonnancement->listePatients->listeRendezVous = monOrdonnancement->listePatients->listeRendezVous->suivant;
+
             }
+            
+            monOrdonnancement->listePatients->listeRendezVous->suivant=listeRendezVous->suivant;
+            monOrdonnancement->listePatients=monOrdonnancement->listePatients->suivant;
+
         }
         for (int k = 0; k < nbSoignant; k++)
         {
             fscanf(fptxt,"%d %s %s\n",&monOrdonnancement->listeSoigneurs->id_soi,monOrdonnancement->listeSoigneurs->nom,monOrdonnancement->listeSoigneurs->prenom);
+            printf("%d %s %s\n",monOrdonnancement->listeSoigneurs->id_soi,monOrdonnancement->listeSoigneurs->nom,monOrdonnancement->listeSoigneurs->prenom);
+            monOrdonnancement->listeSoigneurs->suivant=listeSoigneurs->suivant;
+            monOrdonnancement->listeSoigneurs=monOrdonnancement->listeSoigneurs->suivant;
         }
     
     fclose(fptxt);
