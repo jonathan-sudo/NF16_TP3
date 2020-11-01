@@ -14,15 +14,28 @@ Date: 12/10/2020
  * @param nom le nom d'un sogineur.
  * @param prenom le prénom d'un soigneur.
  */
-T_Soigneur* ajouterSoigneur(T_Soigneur* listeSoigneurs, Index_Soigneur idSoi, char* nom, char* prenom){
-    /*T_Soigneur* soigneur;
+T_Soigneur* ajouterSoigneur(T_Soigneur** listeSoigneurs, Index_Soigneur idSoi, char* nom, char* prenom){
+    T_Soigneur* soigneur;
     soigneur=malloc(sizeof(T_Soigneur));
-    soigneur->id_soi = idSoi;
-    soigneur->nom = nom;
-    soigneur->prenom = prenom;
-    soigneur->suivant = listeSoigneurs;
-    return soigneur;*/
-    return provided_ajouterSoigneur(listeSoigneurs, idSoi, nom, prenom);
+   
+    if (soigneur!=NULL)
+    {
+        soigneur->id_soi = idSoi;
+        soigneur->nom = nom;
+        soigneur->prenom = prenom;
+        soigneur->suivant = *listeSoigneurs;
+        *listeSoigneurs=soigneur;
+        return soigneur;
+        
+    }
+    else
+    {
+        return NULL;
+    }
+    
+    
+    
+    //return provided_ajouterSoigneur(listeSoigneurs, idSoi, nom, prenom);
 }
 /**
  * @brief Ajout d'un patient, où la liste de rendez-vous médicaux pour un nouveau patient est initialement vide.
@@ -31,15 +44,17 @@ T_Soigneur* ajouterSoigneur(T_Soigneur* listeSoigneurs, Index_Soigneur idSoi, ch
  * @param nom le nom d'un patient.
  * @param prenom le prénom d'un patient.
  */
-T_Patient* ajouterPatient(T_Patient* listePatients, Index_Patient idPat, char* nom, char* prenom){
-    /*T_Patient* patient;
+T_Patient* ajouterPatient(T_Patient* *listePatients, Index_Patient idPat, char* nom, char* prenom){
+    T_Patient* patient;
     patient=malloc(sizeof(T_Soigneur));
+    patient->listeRendezVous=malloc(sizeof(T_RendezVous));
     patient->id_pat = idPat;
     patient->nom = nom;
     patient->prenom = prenom;
-    patient->suivant = listePatients;
-    return patient;*/
-    return provided_ajouterPatient(listePatients, idPat, nom, prenom);
+    patient->suivant = *listePatients;
+    *listePatients=patient;
+    return patient;
+    //return provided_ajouterPatient(listePatients, idPat, nom, prenom);
 }
 /**
  * @brief Ajout d’un rendez-vous médical pour un patient.
@@ -50,18 +65,19 @@ T_Patient* ajouterPatient(T_Patient* listePatients, Index_Patient idPat, char* n
  * @param tempsDeplacement la temps de déplacement depuis un RdV précédent.
  * @param desc une discription brève.
  */
-T_RendezVous* ajouterRendezVous(T_RendezVous* listeRdV, Index_Soigneur idSoi, Time dateDebutSouhaitee, Time dateFinSouhaitee, Time tempsDeplacement, char* desc){
-    /*T_RendezVous* rendezvous;
-rend:tabezvous = malloc(sizeof(T_RendezVous));
+T_RendezVous* ajouterRendezVous(T_RendezVous* *listeRdV, Index_Soigneur idSoi, Time dateDebutSouhaitee, Time dateFinSouhaitee, Time tempsDeplacement, char* desc){
+    T_RendezVous* rendezvous;
+    rendezvous = malloc(sizeof(T_RendezVous));
     rendezvous -> id_soi = idSoi;
     rendezvous -> debut_souhaitee = dateDebutSouhaitee;
     rendezvous -> fin_souhaitee = dateFinSouhaitee;
     rendezvous -> temps_deplacement = tempsDeplacement;
     rendezvous -> desc = desc;
-    rendezvous -> suivant = listeRdV;
-    return rendezvous;*/
+    rendezvous -> suivant = *listeRdV;
+    *listeRdV=rendezvous;
+    return rendezvous;
     
-    return provided_ajouterRendezVous(listeRdV, idSoi, dateDebutSouhaitee, dateFinSouhaitee, tempsDeplacement, desc);
+    //return provided_ajouterRendezVous(listeRdV, idSoi, dateDebutSouhaitee, dateFinSouhaitee, tempsDeplacement, desc);
 }
 /**
  * @brief Modification d’ un rendez-vous médical pour un patient par une date, le temps de déplacement ou une description nouvelle :
@@ -326,19 +342,19 @@ void menuPrincipal(void){
 
     T_Patient* listePatients;
     listePatients=malloc(sizeof(T_Patient));
-    ajouterPatient(listePatients,7, "Viera", "Baptiste");
-    ajouterPatient(listePatients,2, "Dupont", "Pierre");
+    ajouterPatient(&listePatients,7, "Viera", "Baptiste");
+    ajouterPatient(&listePatients,2, "Dupont", "Pierre");
     
 
     T_Soigneur* listeSoigneurs;
     listeSoigneurs=malloc(sizeof(T_Soigneur));
-    ajouterSoigneur(listeSoigneurs,007, "Legrand", "Jonathan");
-    ajouterSoigneur(listeSoigneurs,123, "Vincent", "Remi");
+    ajouterSoigneur(&listeSoigneurs,007, "Legrand", "Jonathan");
+    ajouterSoigneur(&listeSoigneurs,123, "Vincent", "Remi");
 
 
     T_RendezVous* listeRendezVous;
     listeRendezVous = malloc(sizeof(T_RendezVous));
-    ajouterRendezVous(listeRendezVous,7,12,13,15,"Petit checkup du main");
+    ajouterRendezVous(&listeRendezVous,7,12,13,15,"Petit checkup du main");
 
     T_Ordonnancement* unOrdonnancement = malloc(sizeof(T_Ordonnancement));
     char nomFichier[20];
@@ -390,7 +406,7 @@ void menuPrincipal(void){
             break;
  
          case 4:
-            //affichage_RendezVous()
+            affichage_RendezVous(listeRendezVous);
             break;
         
         case 5:

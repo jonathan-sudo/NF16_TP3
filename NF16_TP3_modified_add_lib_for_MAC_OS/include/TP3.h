@@ -45,6 +45,7 @@ typedef struct Soigneur{
     // un pointeur du type structure Soigneur qui pointe l'élément suivant.
     struct Soigneur * suivant;
 } T_Soigneur;
+
 // Définir une structure d'un RdV médical où elle contient une description brève,
 // une date de début souhaitée, une date de fin souhaitée, une date de début affectée, une date de fin affectée,
 // le temps de déplacement depuis le rendez-vous précédent, un identifiant du soigneur associé, un pointeur qui pointe l'élément suivant.
@@ -103,7 +104,7 @@ typedef struct Ordonnancement{
  * @param nom le nom d'un soigneur.
  * @param prenom le prénom d'un soigneur.
  */
-T_Soigneur* ajouterSoigneur(T_Soigneur* listeSoigneurs, Index_Soigneur idSoi, char* nom, char* prenom);
+T_Soigneur* ajouterSoigneur(T_Soigneur** listeSoigneurs, Index_Soigneur idSoi, char* nom, char* prenom);
 /**
  * Fonction offerte.
  * @brief Ajout d'un patient, où la liste de rendez-vous médicaux pour un nouveau patient est initialement vide.
@@ -112,7 +113,7 @@ T_Soigneur* ajouterSoigneur(T_Soigneur* listeSoigneurs, Index_Soigneur idSoi, ch
  * @param nom le nom d'un patient.
  * @param prenom le prénom d'un patient.
  */
-T_Patient* ajouterPatient(T_Patient* listePatients, Index_Patient idPat, char* nom, char* prenom) ;
+T_Patient* ajouterPatient(T_Patient** listePatients, Index_Patient idPat, char* nom, char* prenom) ;
 /**
  * Fonction offerte.
  * @brief  jout d’un rendez-vous médical pour un patient.
@@ -123,7 +124,7 @@ T_Patient* ajouterPatient(T_Patient* listePatients, Index_Patient idPat, char* n
  * @param tempsDeplacement la temps de déplacement depuis un RdV précédent.
  * @param desc une discription brève.
  */
-T_RendezVous* ajouterRendezVous(T_RendezVous* listeRdV, Index_Soigneur idSoi, Time dateDebutSouhaitee, Time dateFinSouhaitee, Time tempsDeplacement, char* desc) ;
+T_RendezVous* ajouterRendezVous(T_RendezVous* *listeRdV, Index_Soigneur idSoi, Time dateDebutSouhaitee, Time dateFinSouhaitee, Time tempsDeplacement, char* desc) ;
 /**
  * Fonction offerte.
  * @brief Modification d’ un rendez-vous médical pour un patient par une date, le temps de déplacement ou une description nouvelle :
@@ -387,7 +388,7 @@ void provided_MergeSort(T_Patient ** headRef);
  * @param nom le nom d'un sogineur.
  * @param prenom le prénom d'un soigneur.
  */
-T_Soigneur* ajouterSoigneur(T_Soigneur* listeSoigneurs, Index_Soigneur idSoi, char* nom, char* prenom);
+T_Soigneur* ajouterSoigneur(T_Soigneur** listeSoigneurs, Index_Soigneur idSoi, char* nom, char* prenom);
 /**
  * @brief Ajout d'un patient, où la liste de rendez-vous médicaux pour un nouveau patient est initialement vide.
  * @param listePatients une liste de patients laquelle ne doit pas être vide.
@@ -395,7 +396,7 @@ T_Soigneur* ajouterSoigneur(T_Soigneur* listeSoigneurs, Index_Soigneur idSoi, ch
  * @param nom le nom d'un patient.
  * @param prenom le prénom d'un patient.
  */
-T_Patient* ajouterPatient(T_Patient* listePatients, Index_Patient idPat, char* nom, char* prenom);
+T_Patient* ajouterPatient(T_Patient** listePatients, Index_Patient idPat, char* nom, char* prenom);
 /**
  * @brief Ajout d’un rendez-vous médical pour un patient.
  * @param listeRdV une liste de Rendezvous laquelle ne doit pas être vide.
@@ -405,7 +406,7 @@ T_Patient* ajouterPatient(T_Patient* listePatients, Index_Patient idPat, char* n
  * @param tempsDeplacement la temps de déplacement depuis un RdV précédent.
  * @param desc une discription brève.
  */
-T_RendezVous* ajouterRendezVous(T_RendezVous* listeRdV, Index_Soigneur idSoi, Time dateDebutSouhaitee, Time dateFinSouhaitee, Time tempsDeplacement, char* desc) ;
+T_RendezVous* ajouterRendezVous(T_RendezVous* *listeRdV, Index_Soigneur idSoi, Time dateDebutSouhaitee, Time dateFinSouhaitee, Time tempsDeplacement, char* desc) ;
 /**
  * @brief Modification d’ un rendez-vous médical pour un patient par une date, le temps de déplacement ou une description nouvelle :
  * @param listeRdV une liste de Rendezvous laquelle ne doit pas être vide.
