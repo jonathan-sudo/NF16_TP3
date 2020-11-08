@@ -23,6 +23,13 @@ T_Soigneur* ajouterSoigneur(T_Soigneur** listeSoigneurs, Index_Soigneur idSoi, c
         soigneur->id_soi = idSoi;
         soigneur->nom = nom;
         soigneur->prenom = prenom;
+
+       
+        soigneur->listeIntervalle=malloc(sizeof(T_Intervalle));
+        soigneur->listeIntervalle->debut=0;
+        soigneur->listeIntervalle->fin=1440; // 24h
+    
+    
         soigneur->suivant = *listeSoigneurs;
         *listeSoigneurs=soigneur;
         return soigneur;
@@ -88,18 +95,19 @@ T_RendezVous* ajouterRendezVous(T_RendezVous* *listeRdV, Index_Soigneur idSoi, T
  * @param tempsDeplacement la temps de déplacement depuis un RdV précédent.
  * @param desc une discription brève.
  */
-void modifierRendezVous(T_RendezVous* listeRdV, Index_Soigneur idSoi, Time dateDebutSouhaitee, Time dateFinSouhaitee, Time tempsDeplacement, char* desc){
+void modifierRendezVous(T_RendezVous* *listeRdV, Index_Soigneur idSoi, Time dateDebutSouhaitee, Time dateFinSouhaitee, Time tempsDeplacement, char* desc){
 
-/* T_RendezVous *rdv = listeRdV;
+T_RendezVous *rdv = listeRdV;
   while (rdv != NULL && rdv->id_soi != idSoi){
     rdv = rdv->suivant;
   }
   rdv->debut_souhaitee = dateDebutSouhaitee;
   rdv->fin_souhaitee = dateFinSouhaitee;
   rdv->temps_deplacement = tempsDeplacement;
-  rdv->temps_deplacement = tempsDeplacement;*/
+  rdv->temps_deplacement = tempsDeplacement;
+  rdv->desc = desc;
     
-    return provided_modifierRendezVous(listeRdV, idSoi, dateDebutSouhaitee, dateFinSouhaitee, tempsDeplacement, desc);
+    //return provided_modifierRendezVous(listeRdV, idSoi, dateDebutSouhaitee, dateFinSouhaitee, tempsDeplacement, desc);
 }
 /**
  * @brief Suppression d’un rendez-vous médical pour un patient en donnant l’identifiant du soigneur correspondant.
@@ -113,7 +121,7 @@ void modifierRendezVous(T_RendezVous* listeRdV, Index_Soigneur idSoi, Time dateD
  * @return un pointeur vers la tête de la liste de RdV médicaux après une suppression.
  */
 T_RendezVous* supprimerRendezVous(T_RendezVous* listeRdV, Index_Soigneur idSoi){
-     /*T_RendezVous* rdvpred,*rdvsucc;
+    T_RendezVous* rdvpred,*rdvsucc;
     int trouv=0;
     if (listeRdV==NULL)
     {
@@ -162,10 +170,10 @@ T_RendezVous* supprimerRendezVous(T_RendezVous* listeRdV, Index_Soigneur idSoi){
         }
     }
     return listeRdV;
-        }*/
+    }
     
-    return provided_supprimerRendezVous(listeRdV, idSoi);
-}
+   // return provided_supprimerRendezVous(listeRdV, idSoi);
+
 
 /**
  * @brief Afficher tous les soigneurs et leurs intervalles de temps disponibles
@@ -173,6 +181,7 @@ T_RendezVous* supprimerRendezVous(T_RendezVous* listeRdV, Index_Soigneur idSoi){
  */
 void affichage_Soigneurs(T_Soigneur* listeSoigneurs){
     T_Soigneur* SoigneurEnCours;
+    //T_Intervalle* listeIntervallles=NULL;
     T_RendezVous* listeRdv=NULL;
     SoigneurEnCours = listeSoigneurs;
     while (SoigneurEnCours!=NULL)
@@ -180,6 +189,13 @@ void affichage_Soigneurs(T_Soigneur* listeSoigneurs){
         printf("ID soigneur: %d\n",SoigneurEnCours->id_soi);
         printf("Nom: %s\n",SoigneurEnCours->nom);
         printf("Prenom: %s\n",SoigneurEnCours->prenom);
+        //listeIntervallles=SoigneurEnCours->listeIntervalle;
+        if(SoigneurEnCours->listeIntervalle!=NULL)
+        {
+            printf("Intervalle de temps disponible : [%d,%d[",SoigneurEnCours->listeIntervalle->debut,SoigneurEnCours->listeIntervalle->fin);
+
+        }
+        
 /*         listeRdv = SoigneurEnCours->listeRendezVous;
  *         if (listeRdv!=NULL)
  *         {
@@ -227,7 +243,23 @@ void affichage_Patients(T_Patient* listePatients){
  * @param rendezVous un rendez-vous.
  */
 void affichage_RendezVous(T_RendezVous *rendezVous){
+    
     return provided_affichage_un_RendezVous(rendezVous);
+}
+
+void affichage_Tous_RendezVous(T_RendezVous *rendezVous){
+
+    while (rendezVous!=NULL)
+    {
+        printf("Desc : %s\n",rendezVous->desc);
+        printf("id_soigneur_associé : %d \n",rendezVous->id_soi);
+        printf("temps_déplacement_depuis_rdv_précédent : %d \n",rendezVous->temps_deplacement);
+        printf("RdV souhaité: [%d, %d[ \n",rendezVous->debut_souhaitee, rendezVous->fin_souhaitee);
+        printf("RdV affecté: [%d, %d[ \n",rendezVous->debut_affectee,rendezVous->fin_affectee);
+        rendezVous=rendezVous->suivant;
+        printf("\n\n");
+    }
+
 }
 
 /**
@@ -355,10 +387,13 @@ void menuPrincipal(void){
     T_RendezVous* listeRendezVous;
     listeRendezVous = malloc(sizeof(T_RendezVous));
     ajouterRendezVous(&listeRendezVous,7,12,13,15,"Petit checkup du main");
+    ajouterRendezVous(&listeRendezVous,8,34,33,16,"Visite");
+    ajouterRendezVous(&listeRendezVous,9,45,56,17,"Visite");
+    //modifierRendezVous(listeRendezVous,7,22,23,15,"Modification RDV");
 
     T_Ordonnancement* unOrdonnancement = malloc(sizeof(T_Ordonnancement));
     char nomFichier[20];
-
+    
     int choix;
 
     do
@@ -406,7 +441,7 @@ void menuPrincipal(void){
             break;
  
          case 4:
-            affichage_RendezVous(listeRendezVous);
+            affichage_Tous_RendezVous(listeRendezVous);
             break;
         
         case 5:
@@ -414,10 +449,12 @@ void menuPrincipal(void){
             /*printf("Quel est le nom du fichier binaire qui contiendra votre parc de voitures? " );
             scanf("%s",nomfileparc); 
             saveParc(nomfileparc, voitures,n); */
+            affichage_RendezVous(listeRendezVous);
             break;
         
         case 6:
-        //
+            supprimerRendezVous(listeRendezVous, 8);
+
             break;
 
         case 7:

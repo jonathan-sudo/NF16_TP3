@@ -22,11 +22,3 @@ stdbool.h
 ../include/TP3.h
 /home/baptiste/UTC/NF16/TP3/TP 3 GIT 3/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/include/TP3.h
 
-/home/baptiste/UTC/NF16/TP3/TP 3 GIT 3/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/src/main.c
-stdio.h
--
-../include/TP3.h
-/home/baptiste/UTC/NF16/TP3/TP 3 GIT 3/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/include/TP3.h
-stdlib.h
--
-
