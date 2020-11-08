@@ -165,6 +165,10 @@ T_RendezVous* supprimerRendezVous(T_RendezVous* listeRdV, Index_Soigneur idSoi){
             else
             {
                 rdvpred->suivant=rdvsucc->suivant;
+                /*if(rdvpred->suivant!=NULL)
+                {
+
+                }*/
                 free(rdvsucc);
             }
         }
@@ -490,7 +494,7 @@ void menuPrincipal(void){
             break;
         
         case 6:
-            supprimerRendezVous(listeRendezVous, 8);
+            listeRendezVous=supprimerRendezVous(listeRendezVous, 8);
 
             break;
 
