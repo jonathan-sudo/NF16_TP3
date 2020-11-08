@@ -299,86 +299,89 @@ void affichage_Tous_RendezVous(T_RendezVous *rendezVous){
  * @return un pointeur vers l’instance.
  */
 T_Ordonnancement* creerInstance(char* filename){
-    
+
     T_Ordonnancement* monOrdonnancement;
     monOrdonnancement = malloc(sizeof(T_Ordonnancement));
-
-    T_Patient* listePatients;
-    listePatients=malloc(sizeof(T_Patient));
-
-    T_Soigneur* listeSoigneurs;
-    listeSoigneurs=malloc(sizeof(T_Soigneur));
-
-    T_RendezVous* listeRendezVous;
-    listeRendezVous = malloc(sizeof(T_RendezVous));
-
-    monOrdonnancement->listePatients=listePatients;
-    monOrdonnancement->listeSoigneurs=listeSoigneurs;
-    monOrdonnancement->listePatients->listeRendezVous=listeRendezVous;
-
-
+    T_Patient* listePatientsO;
+    listePatientsO=malloc(sizeof(T_Patient));
+    T_Soigneur* listeSoigneursO;
+    listeSoigneursO=malloc(sizeof(T_Soigneur));
+    T_RendezVous* listeRendezVousO;
+    listeRendezVousO = malloc(sizeof(T_RendezVous));
+    monOrdonnancement->listePatients=listePatientsO;
+    monOrdonnancement->listeSoigneurs=listeSoigneursO;
+    monOrdonnancement->listePatients->listeRendezVous=listeRendezVousO;
     FILE *fptxt;
     fptxt=fopen(filename,"r");
     int nbPatient =0;
     int nbSoignant = 0;
     int nbRdv =0;
+    int idpat;
+    int idsoigneur,interinf,intersup,tdepl;
+    char nom[20],prenom[20], desc[100];
     if (fptxt==NULL)
     {
         printf("erreur lecture fichier");
     }
     else
     {
+        printf("\n");
         fscanf(fptxt,"%d %d\n",&nbPatient,&nbSoignant);
-        printf("%d %d\n",nbPatient,nbSoignant);
+        //printf("%d %d\n",nbPatient,nbSoignant);
         for (int i = 0; i < nbPatient; i++)
         {
-            fscanf(fptxt,"%u %d %s %s\n",&monOrdonnancement->listePatients->id_pat,&nbRdv,monOrdonnancement->listePatients->nom,monOrdonnancement->listePatients->prenom);
-            printf("%u %d %s %s\n",monOrdonnancement->listePatients->id_pat,nbRdv,monOrdonnancement->listePatients->nom,monOrdonnancement->listePatients->prenom);
+            fscanf(fptxt,"%u %d %s %s\n",&idpat,&nbRdv,nom,prenom);
+            //printf("%u %d %s %s\n",idpat,nbRdv,nom,prenom);
+            printf("\n");
+            ajouterPatient(&listePatientsO,idpat,nom,prenom);
+            //printf("%u %d %s %s\n",idpat,nbRdv,nom,prenom);
             for (int j = 0; j < nbRdv; j++)
             {
-                fscanf(fptxt,"%d %d %d %d %s\n",&monOrdonnancement->listePatients->listeRendezVous->id_soi,&monOrdonnancement->listePatients->listeRendezVous->debut_souhaitee,&monOrdonnancement->listePatients->listeRendezVous->fin_souhaitee,&monOrdonnancement->listePatients->listeRendezVous->temps_deplacement,monOrdonnancement->listePatients->listeRendezVous->desc);
-                printf("%d %d %d %d %s\n",monOrdonnancement->listePatients->listeRendezVous->id_soi,monOrdonnancement->listePatients->listeRendezVous->debut_souhaitee,monOrdonnancement->listePatients->listeRendezVous->fin_souhaitee,monOrdonnancement->listePatients->listeRendezVous->temps_deplacement,monOrdonnancement->listePatients->listeRendezVous->desc);
-                monOrdonnancement->listePatients->suivant=listePatients->suivant;
-                monOrdonnancement->listePatients->listeRendezVous = monOrdonnancement->listePatients->listeRendezVous->suivant;
-
+                fscanf(fptxt,"%d %d %d %d %s\n",&idsoigneur,&interinf,&intersup,&tdepl,desc);
+                //printf("%d %d %d %d %s\n",idsoigneur,interinf,intersup,tdepl,desc);
+                //printf("\n");
+                ajouterRendezVous(&listeRendezVousO,idsoigneur,interinf,intersup,tdepl,desc);
             }
-            
-            monOrdonnancement->listePatients->listeRendezVous->suivant=listeRendezVous->suivant;
-            monOrdonnancement->listePatients=monOrdonnancement->listePatients->suivant;
-
+            printf("\n");
         }
+        printf("Récapitulatif Patients : \n\n");
+        affichage_Patients(listePatientsO);
         for (int k = 0; k < nbSoignant; k++)
         {
-            fscanf(fptxt,"%d %s %s\n",&monOrdonnancement->listeSoigneurs->id_soi,monOrdonnancement->listeSoigneurs->nom,monOrdonnancement->listeSoigneurs->prenom);
-            printf("%d %s %s\n",monOrdonnancement->listeSoigneurs->id_soi,monOrdonnancement->listeSoigneurs->nom,monOrdonnancement->listeSoigneurs->prenom);
-            monOrdonnancement->listeSoigneurs->suivant=listeSoigneurs->suivant;
-            monOrdonnancement->listeSoigneurs=monOrdonnancement->listeSoigneurs->suivant;
+            fscanf(fptxt,"%d %s %s\n",&idsoigneur,nom,prenom);
+            //printf("%d %s %s\n",&idsoigneur,nom,prenom);
+            ajouterSoigneur(&listeSoigneursO,idsoigneur,nom,prenom);
         }
-    
-    fclose(fptxt);
+
+        printf("\n");
+        printf("Récapitulatif Soigneurs : \n\n");
+        affichage_Soigneurs(listeSoigneursO);
+
+        fclose(fptxt);
     }
+    monOrdonnancement->listePatients=listePatientsO;
+    monOrdonnancement->listeSoigneurs=listeSoigneursO;
+    monOrdonnancement->listePatients->listeRendezVous=listeRendezVousO;
+
     return monOrdonnancement;
     //return provided_creerInstance(filename);
-
 }
 
-
-
-/**
- * @brief Affectation d’un rendez-vous en fonction des intervalles de temps disponibles d’un soigneur
- * (mettre à jour la date de début affectée et la date de fin affectée du rendez-vous ) 
- * @param rdv un RdV.
- * @param soigneur un soigneur.
- */
-void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
-    return provided_affecterRdV(rdv, soigneur);
-}
-/**
- * @brief Ordonnancer les rendez-vous des patients en fonction des intervalles de temps disponibles
- * pour l’ensemble des soigneurs en minimisant la somme des temps d’attente des patients
- * (le temps d’attente est calculé par la date de début affectée – la date de début souhaitée).
- * L’algorithme glouton d'ordonnancement en minimisant la somme du temps d’attente des patients se construit comme suit :
- * Étape 1 : Trier les patients par ordre décroissant de durée totale des rendez-vous
+    /**
+     * @brief Affectation d’un rendez-vous en fonction des intervalles de temps disponibles d’un soigneur
+     * (mettre à jour la date de début affectée et la date de fin affectée du rendez-vous ) 
+     * @param rdv un RdV.
+     * @param soigneur un soigneur.
+     */
+    void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
+        return provided_affecterRdV(rdv, soigneur);
+    }
+    /**
+     * @brief Ordonnancer les rendez-vous des patients en fonction des intervalles de temps disponibles
+     * pour l’ensemble des soigneurs en minimisant la somme des temps d’attente des patients
+     * (le temps d’attente est calculé par la date de début affectée – la date de début souhaitée).
+     * L’algorithme glouton d'ordonnancement en minimisant la somme du temps d’attente des patients se construit comme suit :
+     * Étape 1 : Trier les patients par ordre décroissant de durée totale des rendez-vous
  *  (la durée d’un rendez-vous est calculée par la date de fin souhaitée – la date de début souhaitée)
  * Étape 2 : Affecter les rendez-vous des patients dans l’ordre ci-dessus aux intervalles de temps disponible des soigneurs.
  * @param solution un instance
@@ -406,25 +409,27 @@ void exportSolution(T_Ordonnancement* solution, char* filename){
 void menuPrincipal(void){
 
 
-    T_Patient* listePatients;
-    listePatients=malloc(sizeof(T_Patient));
-    ajouterPatient(&listePatients,7, "Viera", "Baptiste");
-    ajouterPatient(&listePatients,2, "Dupont", "Pierre");
+/*     T_Patient* listePatients;
+ *     listePatients=malloc(sizeof(T_Patient));
+ *     ajouterPatient(&listePatients,7, "Viera", "Baptiste");
+ *     ajouterPatient(&listePatients,2, "Dupont", "Pierre");
+ * 
+ * 
+ *     T_Soigneur* listeSoigneurs;
+ *     listeSoigneurs=malloc(sizeof(T_Soigneur));
+ *     ajouterSoigneur(&listeSoigneurs,7, "Legrand", "Jonathan");
+ *     ajouterSoigneur(&listeSoigneurs,123, "Vincent", "Remi");
+ * 
+ *     T_Patient *patientExemple = chercher_Patient(listePatients);
+ *     T_RendezVous **listeRendezVousExemple = &(patientExemple->listeRendezVous);
+ *     ajouterRendezVous(listeRendezVousExemple,7,12,13,15,"Petit checkup du main");
+ *     ajouterRendezVous(listeRendezVousExemple,8,34,33,16,"Visite");
+ *     ajouterRendezVous(listeRendezVousExemple,9,45,56,17,"Visite");
+ *     //modifierRendezVous(listeRendezVous,7,22,23,15,"Modification RDV");
+ */
 
-
-    T_Soigneur* listeSoigneurs;
-    listeSoigneurs=malloc(sizeof(T_Soigneur));
-    ajouterSoigneur(&listeSoigneurs,7, "Legrand", "Jonathan");
-    ajouterSoigneur(&listeSoigneurs,123, "Vincent", "Remi");
-
-    T_Patient *patientExemple = chercher_Patient(listePatients);
-    T_RendezVous **listeRendezVousExemple = &(patientExemple->listeRendezVous);
-    ajouterRendezVous(listeRendezVousExemple,7,12,13,15,"Petit checkup du main");
-    ajouterRendezVous(listeRendezVousExemple,8,34,33,16,"Visite");
-    ajouterRendezVous(listeRendezVousExemple,9,45,56,17,"Visite");
-    //modifierRendezVous(listeRendezVous,7,22,23,15,"Modification RDV");
-
-    T_Ordonnancement* unOrdonnancement = malloc(sizeof(T_Ordonnancement));
+    T_Ordonnancement* unOrdonnancement;
+    
     char nomFichier[20];
 
     int choix;
@@ -445,7 +450,7 @@ void menuPrincipal(void){
 
         /* affichage menu */
         printf("=================================================================================");
-        printf("\nBienvenu au menu principal d'une application d'ordonnancement médical\n");
+        printf("\nBienvenue au menu principal d'une application d'ordonnancement médical\n");
         printf("=================================================================================");
 
      printf("\n1: Créer une instance à partir d’un fichier\n"
@@ -473,7 +478,9 @@ void menuPrincipal(void){
                 exit(0);
             }*/
             unOrdonnancement = creerInstance("instance1.txt");
-            
+            T_Patient* listePatients = unOrdonnancement->listePatients;
+            T_Soigneur* listeSoigneurs = unOrdonnancement->listeSoigneurs;
+
             break;
 
          case 2:
@@ -487,11 +494,11 @@ void menuPrincipal(void){
          case 4:            
             patient = chercher_Patient(listePatients);
             //printf("%s\n",patient->nom); //Test de chercher_Patient
-            affichage_Tous_RendezVous(patient->listeRendezVous);
             if (patient == NULL) {
                 printf("Erreur: Aucun patient ne correspond à cet ID\n");
                 break;
             }            
+            affichage_Tous_RendezVous(patient->listeRendezVous);
 
             //On cherche dans la liste de rendez vous du patient le rdv correspondant au soigneur demandé
             printf("ID du soigneur?\n");
