@@ -6,6 +6,38 @@ Date: 12/10/2020
 *****************************************************************/
 #include "../include/TP3.h"
 
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  chercher_Patient
+ *  Description: 
+ *  @brief demande l'ID d'un patient et retourne un pointeur sur le patient correspondant dans la * liste passée en paramètre. Retourne NULL si le patient n'est pas dans la liste.
+ *  @param listePatients une liste de patients
+ *
+ * =====================================================================================
+ */
+
+T_Patient* chercher_Patient (T_Patient* listePatients )
+{
+    Index_Patient idPat;
+    T_Patient *PatientEnCours;
+
+    printf("ID du patient?\n");
+    scanf("%d",&idPat);
+    PatientEnCours = listePatients;
+    while(PatientEnCours!=NULL){
+        if (PatientEnCours->id_pat==idPat){
+            return PatientEnCours;
+        }
+        PatientEnCours = PatientEnCours->suivant;
+    };
+    return NULL;
+
+}		/* -----  end of function chercher_Patient  ----- */
+
+
+
 /**
  * @brief Ajout d’un soigneur, où la liste des intervalles de temps disponibles pour un nouveau soigneur
  * est initialisée avec un seul intervalle [0, inf[.
@@ -17,31 +49,30 @@ Date: 12/10/2020
 T_Soigneur* ajouterSoigneur(T_Soigneur** listeSoigneurs, Index_Soigneur idSoi, char* nom, char* prenom){
     T_Soigneur* soigneur;
     soigneur=malloc(sizeof(T_Soigneur));
-   
+
     if (soigneur!=NULL)
     {
         soigneur->id_soi = idSoi;
         soigneur->nom = nom;
         soigneur->prenom = prenom;
 
-       
         soigneur->listeIntervalle=malloc(sizeof(T_Intervalle));
         soigneur->listeIntervalle->debut=0;
         soigneur->listeIntervalle->fin=1440; // 24h
-    
-    
+
+
         soigneur->suivant = *listeSoigneurs;
         *listeSoigneurs=soigneur;
         return soigneur;
-        
+
     }
     else
     {
         return NULL;
     }
-    
-    
-    
+
+
+
     //return provided_ajouterSoigneur(listeSoigneurs, idSoi, nom, prenom);
 }
 /**
@@ -165,10 +196,6 @@ T_RendezVous* supprimerRendezVous(T_RendezVous* listeRdV, Index_Soigneur idSoi){
             else
             {
                 rdvpred->suivant=rdvsucc->suivant;
-                /*if(rdvpred->suivant!=NULL)
-                {
-
-                }*/
                 free(rdvsucc);
             }
         }
@@ -390,12 +417,11 @@ void menuPrincipal(void){
     ajouterSoigneur(&listeSoigneurs,7, "Legrand", "Jonathan");
     ajouterSoigneur(&listeSoigneurs,123, "Vincent", "Remi");
 
-
-    T_RendezVous* listeRendezVous;
-    listeRendezVous = malloc(sizeof(T_RendezVous));
-    ajouterRendezVous(&listeRendezVous,7,12,13,15,"Petit checkup du main");
-    ajouterRendezVous(&listeRendezVous,8,34,33,16,"Visite");
-    ajouterRendezVous(&listeRendezVous,9,45,56,17,"Visite");
+    T_Patient *patientExemple = chercher_Patient(listePatients);
+    T_RendezVous *listeRendezVousExemple = patientExemple->listeRendezVous;
+    ajouterRendezVous(listeRendezVousExemple,7,12,13,15,"Petit checkup du main");
+    ajouterRendezVous(listeRendezVousExemple,8,34,33,16,"Visite");
+    ajouterRendezVous(listeRendezVousExemple,9,45,56,17,"Visite");
     //modifierRendezVous(listeRendezVous,7,22,23,15,"Modification RDV");
 
     T_Ordonnancement* unOrdonnancement = malloc(sizeof(T_Ordonnancement));
@@ -406,9 +432,13 @@ void menuPrincipal(void){
     //Déclarations pour le case 4
     Index_Patient idPat;
     Index_Soigneur idSoi;
-    T_Patient PatientEnCours;
+    T_Patient *patient;
     T_RendezVous rendezVousEnCours;
-        
+    T_RendezVous *listeRendezVous = NULL;
+    //affichage_Tous_RendezVous(chercher_Patient(listePatients)->listeRendezVous);
+
+
+    //printf("%s\n",chercher_Patient(listePatients)->nom); //Test de chercher_Patient
 
     do
    {
@@ -445,44 +475,34 @@ void menuPrincipal(void){
             unOrdonnancement = creerInstance("instance1.txt");
             
             break;
- 
+
          case 2:
             affichage_Patients(listePatients);
             break;
- 
+
          case 3:
             affichage_Soigneurs(listeSoigneurs);
             break;
- 
-         case 4:
-            //On cherche le patient
-            printf("ID du patient?\n");
-            scanf("%d",&idPat);
-            PatientEnCours = *listePatients;
-            listeRendezVous = NULL;
-            while(PatientEnCours.suivant!=NULL){ //Vérifier que ça ne s'arrête pas trop tôt, peut être passer en do while
-                if (PatientEnCours.id_pat == idPat){
-                    listeRendezVous = PatientEnCours.listeRendezVous;
-                }
-                PatientEnCours = *PatientEnCours.suivant;
-            }
-            if (!listeRendezVous) {
+
+         case 4:            
+            patient = chercher_Patient(listePatients);
+            //printf("%s\n",patient->nom); //Test de chercher_Patient
+            affichage_Tous_RendezVous(patient->listeRendezVous);
+            if (patient == NULL) {
                 printf("Erreur: Aucun patient ne correspond à cet ID\n");
                 break;
             }            
-            
+
             //On cherche dans la liste de rendez vous du patient le rdv correspondant au soigneur demandé
             printf("ID du soigneur?\n");
             scanf("%d",&idSoi);
-            rendezVousEnCours = *listeRendezVous;
-            
+            rendezVousEnCours = *(patient->listeRendezVous);
             while (rendezVousEnCours.suivant!=NULL){
                 if (rendezVousEnCours.id_soi == idSoi){
                     affichage_RendezVous(&rendezVousEnCours);
                 }
                 rendezVousEnCours = *rendezVousEnCours.suivant;
             }
-            //affichage_Tous_RendezVous(listeRendezVous);
             break;
         
         case 5:
@@ -494,7 +514,7 @@ void menuPrincipal(void){
             break;
         
         case 6:
-            listeRendezVous=supprimerRendezVous(listeRendezVous, 8);
+            listeRendezVous = supprimerRendezVous(listeRendezVous, 8);
 
             break;
 

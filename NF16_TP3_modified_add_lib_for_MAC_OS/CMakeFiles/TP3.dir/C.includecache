@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/baptiste/UTC/NF16/TP3/GIT 4/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/include/TP3.h
+/home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/include/TP3.h
 stdio.h
 -
 stdlib.h
@@ -18,15 +18,7 @@ string.h
 stdbool.h
 -
 
-/home/baptiste/UTC/NF16/TP3/GIT 4/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/src/TP3.c
+/home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/src/TP3.c
 ../include/TP3.h
-/home/baptiste/UTC/NF16/TP3/GIT 4/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/include/TP3.h
-
-/home/baptiste/UTC/NF16/TP3/GIT 4/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/src/main.c
-stdio.h
--
-../include/TP3.h
-/home/baptiste/UTC/NF16/TP3/GIT 4/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/include/TP3.h
-stdlib.h
--
+/home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/include/TP3.h
 
