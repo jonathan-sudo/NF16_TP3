@@ -366,6 +366,9 @@ void exportSolution(T_Ordonnancement* solution, char* filename){
     //return provided_exportSolution(solution, filename);
 }
 
+
+
+
 /**
  * @brief un menu principal pour le programme.
  */
@@ -380,7 +383,7 @@ void menuPrincipal(void){
 
     T_Soigneur* listeSoigneurs;
     listeSoigneurs=malloc(sizeof(T_Soigneur));
-    ajouterSoigneur(&listeSoigneurs,007, "Legrand", "Jonathan");
+    ajouterSoigneur(&listeSoigneurs,7, "Legrand", "Jonathan");
     ajouterSoigneur(&listeSoigneurs,123, "Vincent", "Remi");
 
 
@@ -395,6 +398,13 @@ void menuPrincipal(void){
     char nomFichier[20];
     
     int choix;
+
+    //Déclarations pour le case 4
+    Index_Patient idPat;
+    Index_Soigneur idSoi;
+    T_Patient PatientEnCours;
+    T_RendezVous rendezVousEnCours;
+        
 
     do
    {
@@ -441,7 +451,34 @@ void menuPrincipal(void){
             break;
  
          case 4:
-            affichage_Tous_RendezVous(listeRendezVous);
+            //On cherche le patient
+            printf("ID du patient?\n");
+            scanf("%d",&idPat);
+            PatientEnCours = *listePatients;
+            listeRendezVous = NULL;
+            while(PatientEnCours.suivant!=NULL){ //Vérifier que ça ne s'arrête pas trop tôt, peut être passer en do while
+                if (PatientEnCours.id_pat == idPat){
+                    listeRendezVous = PatientEnCours.listeRendezVous;
+                }
+                PatientEnCours = *PatientEnCours.suivant;
+            }
+            if (!listeRendezVous) {
+                printf("Erreur: Aucun patient ne correspond à cet ID\n");
+                break;
+            }            
+            
+            //On cherche dans la liste de rendez vous du patient le rdv correspondant au soigneur demandé
+            printf("ID du soigneur?\n");
+            scanf("%d",&idSoi);
+            rendezVousEnCours = *listeRendezVous;
+            
+            while (rendezVousEnCours.suivant!=NULL){
+                if (rendezVousEnCours.id_soi == idSoi){
+                    affichage_RendezVous(&rendezVousEnCours);
+                }
+                rendezVousEnCours = *rendezVousEnCours.suivant;
+            }
+            //affichage_Tous_RendezVous(listeRendezVous);
             break;
         
         case 5:
