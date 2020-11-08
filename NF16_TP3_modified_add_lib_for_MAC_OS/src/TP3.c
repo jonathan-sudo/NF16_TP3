@@ -410,7 +410,7 @@ void menuPrincipal(void){
     listePatients=malloc(sizeof(T_Patient));
     ajouterPatient(&listePatients,7, "Viera", "Baptiste");
     ajouterPatient(&listePatients,2, "Dupont", "Pierre");
-    
+
 
     T_Soigneur* listeSoigneurs;
     listeSoigneurs=malloc(sizeof(T_Soigneur));
@@ -418,7 +418,7 @@ void menuPrincipal(void){
     ajouterSoigneur(&listeSoigneurs,123, "Vincent", "Remi");
 
     T_Patient *patientExemple = chercher_Patient(listePatients);
-    T_RendezVous *listeRendezVousExemple = patientExemple->listeRendezVous;
+    T_RendezVous **listeRendezVousExemple = &(patientExemple->listeRendezVous);
     ajouterRendezVous(listeRendezVousExemple,7,12,13,15,"Petit checkup du main");
     ajouterRendezVous(listeRendezVousExemple,8,34,33,16,"Visite");
     ajouterRendezVous(listeRendezVousExemple,9,45,56,17,"Visite");
@@ -426,7 +426,7 @@ void menuPrincipal(void){
 
     T_Ordonnancement* unOrdonnancement = malloc(sizeof(T_Ordonnancement));
     char nomFichier[20];
-    
+
     int choix;
 
     //Déclarations pour le case 4
@@ -441,12 +441,12 @@ void menuPrincipal(void){
     //printf("%s\n",chercher_Patient(listePatients)->nom); //Test de chercher_Patient
 
     do
-   {
+    {
 
-     /* affichage menu */
-     printf("=================================================================================");
-     printf("\nBienvenu au menu principal d'une application d'ordonnancement médical\n");
-     printf("=================================================================================");
+        /* affichage menu */
+        printf("=================================================================================");
+        printf("\nBienvenu au menu principal d'une application d'ordonnancement médical\n");
+        printf("=================================================================================");
 
      printf("\n1: Créer une instance à partir d’un fichier\n"
              "2: Afficher tous les patients et leurs rendez-vous\n"
