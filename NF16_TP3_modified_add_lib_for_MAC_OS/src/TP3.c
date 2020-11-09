@@ -135,7 +135,6 @@ T_RendezVous *rdv = listeRdV;
   rdv->debut_souhaitee = dateDebutSouhaitee;
   rdv->fin_souhaitee = dateFinSouhaitee;
   rdv->temps_deplacement = tempsDeplacement;
-  rdv->temps_deplacement = tempsDeplacement;
   rdv->desc = desc;
     
     //return provided_modifierRendezVous(listeRdV, idSoi, dateDebutSouhaitee, dateFinSouhaitee, tempsDeplacement, desc);
@@ -190,7 +189,7 @@ T_RendezVous* supprimerRendezVous(T_RendezVous* listeRdV, Index_Soigneur idSoi){
 
             if (trouv==0)
             {
-                printf("Le rendez-vous n'existe pas  ");
+                printf("Le rendez-vous n'existe pas  \n");
             }
             
             else
@@ -273,9 +272,17 @@ void affichage_Patients(T_Patient* listePatients){
  * @brief Afficher un rendez-vous en indiquant l’identifiant du patient et le soigneur correspondant
  * @param rendezVous un rendez-vous.
  */
-void affichage_RendezVous(T_RendezVous *rendezVous){
-    
-    return provided_affichage_un_RendezVous(rendezVous);
+void affichage_RendezVous(T_RendezVous rendezVous){
+    if (rendezVous.id_soi==0){
+        printf("Erreur: le rendez-vous demandé n'existe pas\n\n");
+    } else {
+        printf("Desc : %s\n",rendezVous.desc);
+        printf("id_soigneur_associé : %d \n",rendezVous.id_soi);
+        printf("temps_déplacement_depuis_rdv_précédent : %d \n",rendezVous.temps_deplacement);
+        printf("RdV souhaité: [%d, %d[ \n",rendezVous.debut_souhaitee, rendezVous.fin_souhaitee);
+        printf("RdV affecté: [%d, %d[ \n",rendezVous.debut_affectee,rendezVous.fin_affectee);
+        printf("\n\n");
+    }
 }
 
 void affichage_Tous_RendezVous(T_RendezVous *rendezVous){
@@ -308,9 +315,6 @@ T_Ordonnancement* creerInstance(char* filename){
     listeSoigneursO=malloc(sizeof(T_Soigneur));
     T_RendezVous* listeRendezVousO;
     listeRendezVousO = malloc(sizeof(T_RendezVous));
-    monOrdonnancement->listePatients=listePatientsO;
-    monOrdonnancement->listeSoigneurs=listeSoigneursO;
-    monOrdonnancement->listePatients->listeRendezVous=listeRendezVousO;
     FILE *fptxt;
     fptxt=fopen(filename,"r");
     int nbPatient =0;
@@ -409,24 +413,24 @@ void exportSolution(T_Ordonnancement* solution, char* filename){
 void menuPrincipal(void){
 
 
-/*     T_Patient* listePatients;
- *     listePatients=malloc(sizeof(T_Patient));
- *     ajouterPatient(&listePatients,7, "Viera", "Baptiste");
- *     ajouterPatient(&listePatients,2, "Dupont", "Pierre");
- * 
- * 
- *     T_Soigneur* listeSoigneurs;
- *     listeSoigneurs=malloc(sizeof(T_Soigneur));
- *     ajouterSoigneur(&listeSoigneurs,7, "Legrand", "Jonathan");
- *     ajouterSoigneur(&listeSoigneurs,123, "Vincent", "Remi");
- * 
- *     T_Patient *patientExemple = chercher_Patient(listePatients);
- *     T_RendezVous **listeRendezVousExemple = &(patientExemple->listeRendezVous);
- *     ajouterRendezVous(listeRendezVousExemple,7,12,13,15,"Petit checkup du main");
- *     ajouterRendezVous(listeRendezVousExemple,8,34,33,16,"Visite");
- *     ajouterRendezVous(listeRendezVousExemple,9,45,56,17,"Visite");
- *     //modifierRendezVous(listeRendezVous,7,22,23,15,"Modification RDV");
- */
+    T_Patient* listePatients;
+    listePatients=malloc(sizeof(T_Patient));
+    ajouterPatient(&listePatients,7, "Viera", "Baptiste");
+    ajouterPatient(&listePatients,2, "Dupont", "Pierre");
+
+
+    T_Soigneur* listeSoigneurs;
+    listeSoigneurs=malloc(sizeof(T_Soigneur));
+    ajouterSoigneur(&listeSoigneurs,7, "Legrand", "Jonathan");
+    ajouterSoigneur(&listeSoigneurs,123, "Vincent", "Remi");
+
+    T_Patient *patientExemple = chercher_Patient(listePatients);
+    T_RendezVous **listeRendezVousExemple = &(patientExemple->listeRendezVous);
+    ajouterRendezVous(listeRendezVousExemple,7,12,13,15,"Petit checkup du main");
+    ajouterRendezVous(listeRendezVousExemple,8,34,33,16,"Visite");
+    ajouterRendezVous(listeRendezVousExemple,9,45,56,17,"Visite");
+    //modifierRendezVous(listeRendezVous,7,22,23,15,"Modification RDV");
+
 
     T_Ordonnancement* unOrdonnancement;
     
@@ -477,9 +481,10 @@ void menuPrincipal(void){
                 printf("Le fichier %s n'existe pas! Continuer? [y] n: ",nomFichier);
                 exit(0);
             }*/
-            unOrdonnancement = creerInstance("instance1.txt");
-            T_Patient* listePatients = unOrdonnancement->listePatients;
-            T_Soigneur* listeSoigneurs = unOrdonnancement->listeSoigneurs;
+/*             unOrdonnancement = creerInstance("instance1.txt");
+ *             T_Patient* listePatients = unOrdonnancement->listePatients;
+ *             T_Soigneur* listeSoigneurs = unOrdonnancement->listeSoigneurs;
+ */
 
             break;
 
@@ -506,29 +511,37 @@ void menuPrincipal(void){
             rendezVousEnCours = *(patient->listeRendezVous);
             while (rendezVousEnCours.suivant!=NULL){
                 if (rendezVousEnCours.id_soi == idSoi){
-                    affichage_RendezVous(&rendezVousEnCours);
+                    break;
                 }
                 rendezVousEnCours = *rendezVousEnCours.suivant;
             }
+
+            affichage_RendezVous(rendezVousEnCours);
             break;
-        
-        case 5:
-            // Création d'un fichier binaire qui contient l'ensemble des voitures du parc
-            /*printf("Quel est le nom du fichier binaire qui contiendra votre parc de voitures? " );
-            scanf("%s",nomfileparc); 
-            saveParc(nomfileparc, voitures,n); */
-            affichage_RendezVous(listeRendezVous);
-            break;
-        
-        case 6:
-            listeRendezVous = supprimerRendezVous(listeRendezVous, 8);
+
+         case 5:
 
             break;
 
-        case 7:
+         case 6:
+            patient = chercher_Patient(listePatients);
+            if (patient == NULL) {
+                printf("Erreur: Aucun patient ne correspond à cet ID\n");
+                break;
+            }            
+            affichage_Tous_RendezVous(patient->listeRendezVous);
+
+            //On cherche dans la liste de rendez vous du patient le rdv correspondant au soigneur demandé
+            printf("ID du soigneur?\n");
+            scanf("%d",&idSoi);
+            rendezVousEnCours = *supprimerRendezVous(patient->listeRendezVous,idSoi);
+            affichage_Tous_RendezVous(patient->listeRendezVous);
             break;
 
-        case 8:
+         case 7:
+            break;
+
+         case 8:
             break;
         
         case 9:
