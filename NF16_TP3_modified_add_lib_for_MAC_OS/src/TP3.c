@@ -445,6 +445,12 @@ void menuPrincipal(void){
     T_RendezVous rendezVousEnCours;
     T_RendezVous *listeRendezVous = NULL;
     //affichage_Tous_RendezVous(chercher_Patient(listePatients)->listeRendezVous);
+    
+    //Déclarations pour le case 5
+    Time dateDebutSouhaitee;
+    Time dateFinSouhaitee;
+    Time tempsDeplacement;
+    char desc[125];
 
 
     //printf("%s\n",chercher_Patient(listePatients)->nom); //Test de chercher_Patient
@@ -520,6 +526,32 @@ void menuPrincipal(void){
             break;
 
          case 5:
+            patient = chercher_Patient(listePatients);
+            if (patient == NULL) {
+                printf("Erreur: Aucun patient ne correspond à cet ID\n");
+                break;
+            }            
+            affichage_Tous_RendezVous(patient->listeRendezVous);
+
+            //On cherche dans la liste de rendez vous du patient le rdv correspondant au soigneur demandé
+            printf("ID du soigneur?\n");
+            scanf("%d",&idSoi);
+            
+            printf("Début souhaité?\n");
+            scanf("%d",&dateDebutSouhaitee);
+            
+            printf("Fin souhaité?\n");
+            scanf("%d",&dateFinSouhaitee);
+
+            printf("Temps de déplacement nécessaire?\n");
+            scanf("%d",&tempsDeplacement);
+            
+            printf("Description?\n");
+            scanf("%s",&desc);
+
+
+            modifierRendezVous(patient->listeRendezVous,idSoi,dateDebutSouhaitee,dateFinSouhaitee,tempsDeplacement,desc);
+            affichage_Tous_RendezVous(patient->listeRendezVous);
 
             break;
 
