@@ -8,6 +8,27 @@ Date: 12/10/2020
 
 
 
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  chercher_RdV
+ *  Description:  
+ * =====================================================================================
+ */
+    T_RendezVous
+chercher_RdV ( T_RendezVous *listeRendezVous, Index_Soigneur idSoi )
+{
+    T_RendezVous rendezVousEnCours = *listeRendezVous;
+    while (rendezVousEnCours.suivant!=NULL){
+        if (rendezVousEnCours.id_soi == idSoi){
+            return rendezVousEnCours;
+        }
+        rendezVousEnCours = *rendezVousEnCours.suivant;
+    }
+}		/* -----  end of function chercher_RdV  ----- */
+
+
+
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  chercher_Patient
@@ -257,7 +278,7 @@ void affichage_Patients(T_Patient* listePatients){
        listeRdv = PatientEnCours->listeRendezVous;
        if (listeRdv!=NULL)
        {
-           printf("Date de début affectée en minutes: %d\n ",listeRdv->debut_affectee);
+           printf("Date de début affectée en minutes: %d\n",listeRdv->debut_affectee);
            printf("Date de fin affectée en minutes: %d\n",listeRdv->fin_affectee);
            printf("ID soignant: %d\n",listeRdv->id_soi);
        }
@@ -378,7 +399,9 @@ T_Ordonnancement* creerInstance(char* filename){
      * @param soigneur un soigneur.
      */
     void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
-        return provided_affecterRdV(rdv, soigneur);
+        printf("Coucou ça va?\n");
+
+
     }
     /**
      * @brief Ordonnancer les rendez-vous des patients en fonction des intervalles de temps disponibles
@@ -480,16 +503,18 @@ void menuPrincipal(void){
       switch(choix)
       {
          case 1:
-            printf(" Veuillez saisir le nom du fichier d'une instance ");
-            /*scanf("%s",nomFichier);
-            if (!(strcmp(nomFichier,"instance1.txt"))&&(!strcmp(nomFichier,"instance2.txt")))
-            {
-                printf("Le fichier %s n'existe pas! Continuer? [y] n: ",nomFichier);
-                exit(0);
-            }*/
-/*             unOrdonnancement = creerInstance("instance1.txt");
- *             T_Patient* listePatients = unOrdonnancement->listePatients;
- *             T_Soigneur* listeSoigneurs = unOrdonnancement->listeSoigneurs;
+/*             printf(" Veuillez saisir le nom du fichier d'une instance ");
+ *             scanf("%s",nomFichier);
+ *             if (!(strcmp(nomFichier,"instance1.txt"))&&(!strcmp(nomFichier,"instance2.txt")))
+ *             {
+ *                 printf("Le fichier %s n'existe pas! Continuer? [y] n: ",nomFichier);
+ *                 exit(0);
+ *             }
+ */
+/*              unOrdonnancement = creerInstance("instance2.txt");
+ *              T_Patient* listePatients = unOrdonnancement->listePatients;
+ *              T_Soigneur* listeSoigneurs = unOrdonnancement->listeSoigneurs;
+ *  
  */
 
             break;
@@ -514,14 +539,8 @@ void menuPrincipal(void){
             //On cherche dans la liste de rendez vous du patient le rdv correspondant au soigneur demandé
             printf("ID du soigneur?\n");
             scanf("%d",&idSoi);
-            rendezVousEnCours = *(patient->listeRendezVous);
-            while (rendezVousEnCours.suivant!=NULL){
-                if (rendezVousEnCours.id_soi == idSoi){
-                    break;
-                }
-                rendezVousEnCours = *rendezVousEnCours.suivant;
-            }
 
+            rendezVousEnCours = chercher_RdV(patient->listeRendezVous,idSoi);
             affichage_RendezVous(rendezVousEnCours);
             break;
 
@@ -533,7 +552,6 @@ void menuPrincipal(void){
             }            
             affichage_Tous_RendezVous(patient->listeRendezVous);
 
-            //On cherche dans la liste de rendez vous du patient le rdv correspondant au soigneur demandé
             printf("ID du soigneur?\n");
             scanf("%d",&idSoi);
             
@@ -571,6 +589,10 @@ void menuPrincipal(void){
             break;
 
          case 7:
+            //ordonnancer(unOrdonnancement); 
+            //Test de affecterRdV
+            rendezVousEnCours = chercher_RdV(patientExemple->listeRendezVous,7);
+            affecterRdV(&rendezVousEnCours,7);
             break;
 
          case 8:
@@ -587,3 +609,8 @@ void menuPrincipal(void){
 
     //return provided_menu();
 }
+
+
+//Ne pas oublier :
+//Arrêter d'afficher les éléments nuls dans les listes
+//Les rdv sont bizarres dans afficher patients
