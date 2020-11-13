@@ -256,7 +256,7 @@ void affichage_Soigneurs(T_Soigneur* listeSoigneurs){
  *         }
  */
         SoigneurEnCours=SoigneurEnCours->suivant;
-        printf("\n");
+        printf("\n\n");
     }
 
 }
@@ -593,7 +593,7 @@ void menuPrincipal(void){
             scanf("%d",&tempsDeplacement);
             
             printf("Description?\n");
-            scanf("%s",&desc);
+            scanf("%s",desc);
 
 
             modifierRendezVous(patient->listeRendezVous,idSoi,dateDebutSouhaitee,dateFinSouhaitee,tempsDeplacement,desc);
