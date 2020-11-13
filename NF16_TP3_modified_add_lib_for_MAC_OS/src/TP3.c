@@ -328,22 +328,29 @@ void affichage_Tous_RendezVous(T_RendezVous *rendezVous){
  */
 T_Ordonnancement* creerInstance(char* filename){
 
-    T_Ordonnancement* monOrdonnancement;
+   T_Ordonnancement* monOrdonnancement;
     monOrdonnancement = malloc(sizeof(T_Ordonnancement));
+
     T_Patient* listePatientsO;
     listePatientsO=malloc(sizeof(T_Patient));
+
     T_Soigneur* listeSoigneursO;
     listeSoigneursO=malloc(sizeof(T_Soigneur));
+
     T_RendezVous* listeRendezVousO;
     listeRendezVousO = malloc(sizeof(T_RendezVous));
+
+
+
     FILE *fptxt;
     fptxt=fopen(filename,"r");
-    int nbPatient =0;
-    int nbSoignant = 0;
-    int nbRdv =0;
-    int idpat;
-    int idsoigneur,interinf,intersup,tdepl;
-    char nom[20],prenom[20], desc[100];
+    int nbPatient =0, nbSoignant = 0, nbRdv =0;
+    int idpat, idsoigneur,interinf,intersup,tdepl;
+    char *nom,*prenom, *desc;
+    desc=malloc(sizeof(0));
+    nom=malloc(sizeof(0));
+    prenom=malloc(sizeof(0));
+
     if (fptxt==NULL)
     {
         printf("erreur lecture fichier");
@@ -355,27 +362,38 @@ T_Ordonnancement* creerInstance(char* filename){
         //printf("%d %d\n",nbPatient,nbSoignant);
         for (int i = 0; i < nbPatient; i++)
         {
-            fscanf(fptxt,"%u %d %s %s\n",&idpat,&nbRdv,nom,prenom);
+            fscanf(fptxt,"%d %d %s %s\n",&idpat,&nbRdv,nom,prenom);
             //printf("%u %d %s %s\n",idpat,nbRdv,nom,prenom);
             printf("\n");
             ajouterPatient(&listePatientsO,idpat,nom,prenom);
-            //printf("%u %d %s %s\n",idpat,nbRdv,nom,prenom);
+            
             for (int j = 0; j < nbRdv; j++)
             {
                 fscanf(fptxt,"%d %d %d %d %s\n",&idsoigneur,&interinf,&intersup,&tdepl,desc);
                 //printf("%d %d %d %d %s\n",idsoigneur,interinf,intersup,tdepl,desc);
                 //printf("\n");
                 ajouterRendezVous(&listeRendezVousO,idsoigneur,interinf,intersup,tdepl,desc);
+                desc=malloc(0);
             }
+
             printf("\n");
+
+            nom=malloc(0); // cela permet en quelque sorte de libérer la mémoire pour l'itération suivante
+            prenom=malloc(0); 
         }
+
         printf("Récapitulatif Patients : \n\n");
         affichage_Patients(listePatientsO);
+        
         for (int k = 0; k < nbSoignant; k++)
         {
+            
             fscanf(fptxt,"%d %s %s\n",&idsoigneur,nom,prenom);
+            printf("\n");
             //printf("%d %s %s\n",&idsoigneur,nom,prenom);
             ajouterSoigneur(&listeSoigneursO,idsoigneur,nom,prenom);
+            nom=malloc(0);
+            prenom=malloc(0);
         }
 
         printf("\n");
@@ -384,13 +402,23 @@ T_Ordonnancement* creerInstance(char* filename){
 
         fclose(fptxt);
     }
+ 
     monOrdonnancement->listePatients=listePatientsO;
     monOrdonnancement->listeSoigneurs=listeSoigneursO;
     monOrdonnancement->listePatients->listeRendezVous=listeRendezVousO;
 
+
+    char *today; 
+    time_t timestamp = time(NULL); 
+    today=malloc(sizeof(0));
+  
+    strftime(today,100, "%Y-%m-%d", localtime(&timestamp));
+    monOrdonnancement->date=today;
+    printf("Date de creation de l'ordonnancement : %s\n\n",today);
     return monOrdonnancement;
     //return provided_creerInstance(filename);
 }
+
 
     /**
      * @brief Affectation d’un rendez-vous en fonction des intervalles de temps disponibles d’un soigneur
