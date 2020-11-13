@@ -475,11 +475,12 @@ void menuPrincipal(void){
     ajouterSoigneur(&listeSoigneurs,7, "Legrand", "Jonathan");
     ajouterSoigneur(&listeSoigneurs,123, "Vincent", "Remi");
 
-    T_Patient *patientExemple = chercher_Patient(listePatients);
+    /*T_Patient *patientExemple = chercher_Patient(listePatients);
     T_RendezVous **listeRendezVousExemple = &(patientExemple->listeRendezVous);
     ajouterRendezVous(listeRendezVousExemple,7,12,13,15,"Petit checkup du main");
     ajouterRendezVous(listeRendezVousExemple,8,34,33,16,"Visite");
-    ajouterRendezVous(listeRendezVousExemple,9,45,56,17,"Visite");
+    ajouterRendezVous(listeRendezVousExemple,9,45,56,17,"Visite");*/
+    
     //modifierRendezVous(listeRendezVous,7,22,23,15,"Modification RDV");
 
 
@@ -619,7 +620,8 @@ void menuPrincipal(void){
          case 7:
             //ordonnancer(unOrdonnancement); 
             //Test de affecterRdV
-            rendezVousEnCours = chercher_RdV(patientExemple->listeRendezVous,7);
+              
+            //rendezVousEnCours = chercher_RdV(patientExemple->listeRendezVous,7);
             affecterRdV(&rendezVousEnCours,7);
             break;
 
