@@ -7,6 +7,57 @@ Date: 12/10/2020
 #include "../include/TP3.h"
 
 
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  ajouterIntervalle
+ *  Description:  
+ * =====================================================================================
+ */
+T_Intervalle* ajouterIntervalle ( T_Intervalle** listeIntervalle, Time debut, Time fin )
+{
+    printf("Moi ça va j'ajoute des intervalles\n");
+    if(*listeIntervalle == NULL){
+        printf("Erreur: la liste d'intervalles disponibles est nulle");
+        exit(EXIT_FAILURE);
+    }
+    T_Intervalle *intervalle = malloc(sizeof(T_Intervalle));
+    intervalle->debut = debut;
+    intervalle->fin = fin;
+
+    intervalle->suivant = *listeIntervalle;
+    *listeIntervalle = intervalle;
+    printf("Oh il a été ajouté c'est trop bien\n");
+    return intervalle;
+}		/* -----  end of function ajouterIntervalle  ----- */
+
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  supprimerIntervalle
+ *  Description:  
+ * =====================================================================================
+ */
+void supprimerIntervalle (T_Intervalle** listeIntervalle,T_Intervalle* intervalle )
+{
+    printf("Moi ça va je supprime des intervalles\n");
+    T_Intervalle* intervalleActuel = *listeIntervalle;
+
+    if(*listeIntervalle == NULL){
+        printf("Erreur dans supprimerIntervalle: la liste d'intervalles disponibles est nulle ou l'intervalle à supprimer n'existe pas");
+        exit(EXIT_FAILURE);
+    }
+
+    while(intervalleActuel->suivant != NULL){
+        if(intervalleActuel->suivant == intervalle ){
+            intervalleActuel->suivant = intervalle->suivant;
+            free(intervalle);
+            printf("L'intervalle a été supprimé\n");
+            break;
+        }
+    }
+
+}		/* -----  end of function supprimerIntervalle  ----- */
 
 
 /* 
@@ -419,20 +470,67 @@ T_Ordonnancement* creerInstance(char* filename){
 }
 
 
-    /**
-     * @brief Affectation d’un rendez-vous en fonction des intervalles de temps disponibles d’un soigneur
-     * (mettre à jour la date de début affectée et la date de fin affectée du rendez-vous ) 
-     * @param rdv un RdV.
-     * @param soigneur un soigneur.
-     */
-    void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
+/**
+ * @brief Affectation d’un rendez-vous en fonction des intervalles de temps disponibles d’un soigneur
+ * (mettre à jour la date de début affectée et la date de fin affectée du rendez-vous ) 
+ * @param rdv un RdV.
+ * @param soigneur un soigneur.
+ */
+void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
+    printf("Coucou ça va?\n");
+    printf("Soigneur %s:\n",soigneur->prenom);
+    printf("Coucou ça va?\n");
+    Time debutI, finI, debut_affectee = 0, fin_affectee = 0;
+
+    T_Intervalle* intervalle; 
+    printf("Coucou ça va?\n");
+    intervalle = soigneur->listeIntervalle;
+    printf("Coucou ça va?\n");
+    //On cherche un intervalle de temps disponible qui correspond à l'intervalle souhaité
+    do{
         printf("Coucou ça va?\n");
+        debutI = intervalle->debut;
+        finI = intervalle->fin;
+        if(rdv->debut_souhaitee >= debutI && rdv->fin_souhaitee <= finI){
+            debut_affectee = rdv->debut_souhaitee;
+            fin_affectee = rdv->debut_souhaitee;
+        }
+    }while(intervalle->suivant != NULL);
 
-
+    printf("Coucou ça va?\n");
+    //Si aucun intervalle ne permet d'avoir un rdv au moment souhaité, on affecte un rendez vous après le dernier rdv du soigneur
+    if (debut_affectee == 0 && fin_affectee == 0){
+        debut_affectee = intervalle->debut; 
+        fin_affectee = debut_affectee + rdv->fin_souhaitee - rdv->debut_souhaitee + rdv->temps_deplacement; 
     }
-    /**
-     * @brief Ordonnancer les rendez-vous des patients en fonction des intervalles de temps disponibles
-     * pour l’ensemble des soigneurs en minimisant la somme des temps d’attente des patients
+
+    printf("Coucou ça va?\n");
+    //Modification de la liste d'intervalles de temps disponible du soigneur en fonction du rdv affecté
+    if (debutI == debut_affectee ){
+        if(finI == fin_affectee){
+            supprimerIntervalle(&(soigneur->listeIntervalle),intervalle);
+        } else {
+            intervalle->debut = fin_affectee;
+        }
+    } else {
+        if(finI == fin_affectee){ //cas finI colle, debutI ne colle pas
+            intervalle->fin = debut_affectee;
+        } else {
+            intervalle->fin = debut_affectee;
+            ajouterIntervalle(&(soigneur->listeIntervalle),fin_affectee,finI);
+        }
+    }
+
+    //On modifie le rdv pour montrer qu'il a été affecté à un soigneur
+    rdv->debut_affectee = debut_affectee;
+    rdv->fin_affectee = fin_affectee;
+    rdv->id_soi = soigneur->id_soi;
+
+
+}
+/**
+ * @brief Ordonnancer les rendez-vous des patients en fonction des intervalles de temps disponibles
+ * pour l’ensemble des soigneurs en minimisant la somme des temps d’attente des patients
      * (le temps d’attente est calculé par la date de début affectée – la date de début souhaitée).
      * L’algorithme glouton d'ordonnancement en minimisant la somme du temps d’attente des patients se construit comme suit :
      * Étape 1 : Trier les patients par ordre décroissant de durée totale des rendez-vous
@@ -557,15 +655,17 @@ void menuPrincipal(void){
 
 
     T_Patient* listePatients;
-    listePatients=malloc(sizeof(T_Patient));
-    ajouterPatient(&listePatients,7, "Viera", "Baptiste");
-    ajouterPatient(&listePatients,2, "Dupont", "Pierre");
-
+/*     listePatients=malloc(sizeof(T_Patient));
+ *     ajouterPatient(&listePatients,7, "Viera", "Baptiste");
+ *     ajouterPatient(&listePatients,2, "Dupont", "Pierre");
+ * 
+ */
 
     T_Soigneur* listeSoigneurs;
-    listeSoigneurs=malloc(sizeof(T_Soigneur));
-    ajouterSoigneur(&listeSoigneurs,7, "Legrand", "Jonathan");
-    ajouterSoigneur(&listeSoigneurs,123, "Vincent", "Remi");
+/*     listeSoigneurs=malloc(sizeof(T_Soigneur));
+ *     ajouterSoigneur(&listeSoigneurs,7, "Legrand", "Jonathan");
+ *     ajouterSoigneur(&listeSoigneurs,123, "Vincent", "Remi");
+ */
 
     /*T_Patient *patientExemple = chercher_Patient(listePatients);
     T_RendezVous **listeRendezVousExemple = &(patientExemple->listeRendezVous);
@@ -715,7 +815,7 @@ void menuPrincipal(void){
             //Test de affecterRdV
 
             //rendezVousEnCours = chercher_RdV(patientExemple->listeRendezVous,7);
-            affecterRdV(&rendezVousEnCours,7);
+            affecterRdV(&rendezVousEnCours,listeSoigneurs);
             break;
 
          case 8:
