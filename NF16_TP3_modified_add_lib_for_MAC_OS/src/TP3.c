@@ -340,7 +340,7 @@ T_Ordonnancement* creerInstance(char* filename){
     T_RendezVous* listeRendezVousO;
     listeRendezVousO = malloc(sizeof(T_RendezVous));
 
-
+    listePatientsO->listeRendezVous=listeRendezVousO;
 
     FILE *fptxt;
     fptxt=fopen(filename,"r");
@@ -372,7 +372,7 @@ T_Ordonnancement* creerInstance(char* filename){
                 fscanf(fptxt,"%d %d %d %d %s\n",&idsoigneur,&interinf,&intersup,&tdepl,desc);
                 //printf("%d %d %d %d %s\n",idsoigneur,interinf,intersup,tdepl,desc);
                 //printf("\n");
-                ajouterRendezVous(&listeRendezVousO,idsoigneur,interinf,intersup,tdepl,desc);
+                ajouterRendezVous(&(listePatientsO->listeRendezVous),idsoigneur,interinf,intersup,tdepl,desc);
                 desc=malloc(0);
             }
 
@@ -405,7 +405,6 @@ T_Ordonnancement* creerInstance(char* filename){
  
     monOrdonnancement->listePatients=listePatientsO;
     monOrdonnancement->listeSoigneurs=listeSoigneursO;
-    monOrdonnancement->listePatients->listeRendezVous=listeRendezVousO;
 
 
     char *today; 
@@ -451,9 +450,102 @@ void ordonnancer(T_Ordonnancement* solution){
  * @param solution une solution d'un ordonnancement.
  * @param filename le nom d'un ficher exporté.
  */
-void exportSolution(T_Ordonnancement* solution, char* filename){
-    //return provided_exportSolution(solution, filename);
+
+
+void ExportSolution(T_Ordonnancement* solution, char* filename)
+    {
+
+    T_Patient* listePat = solution->listePatients;
+    T_Soigneur* listeSoig = solution->listeSoigneurs;
+    //T_RendezVous* listeRdV = solution->listePatients->listeRendezVous;
+
+
+    int nbPat=0, nbSoig = 0, nbRdV = 0;
+    
+    FILE *fptxt;
+    int i =0;
+    char finalfilename[1024];
+    char point[] =".";
+    char ext [] =".txt";
+
+    /*strcat(finalfilename,filename);
+    printf("%s\n\n",finalfilename);
+    strcat(finalfilename,point);
+    printf("%s\n\n",finalfilename);    
+    strcat(finalfilename,solution->date);
+    printf("%s\n\n",finalfilename);
+    strcat(finalfilename,ext);*/
+
+    snprintf( finalfilename, sizeof( finalfilename ), "%s%s%s%s", filename,point,solution->date, ext);
+
+    fptxt=fopen(finalfilename,"w");
+
+    if (fptxt==NULL) // test d'erreur
+    {
+        printf("erreur ecriture fichier");
+    }
+        
+    while (listePat->suivant!=NULL)
+    {
+        nbPat++;
+        listePat=listePat->suivant;
+    }
+    printf("%d\n\n",nbPat);
+
+    while (listeSoig->suivant!=NULL)
+    {
+        nbSoig++;
+        listeSoig=listeSoig->suivant;
+
+    }
+
+    /*while (listeRdV!=NULL)
+    {
+        nbRdV++;
+        listeRdV=listeRdV->suivant;
+
+    }*/
+
+    listePat = solution->listePatients;
+    listeSoig = solution->listeSoigneurs;
+    listePat->listeRendezVous=solution->listePatients->listeRendezVous;
+    //printf("%d\n\n",listePat->listeRendezVous->id_soi);
+    //listeRdV = solution->listePatients->listeRendezVous;
+    T_RendezVous* debutRDV=NULL;
+
+    // pas besoin de retourner au début car les premier élément insérer à partir du fichier se trouve a la fin des listes
+
+    fprintf(fptxt,"%d %d\n",nbPat,nbSoig);
+    for (int i = 0; i < nbPat; i++)
+    {   
+        //debutRDV = listePat->listeRendezVous;
+       /*while (listePat->listeRendezVous->suivant!=NULL)
+        {
+            nbRdV++;
+            listePat->listeRendezVous=listePat->listeRendezVous->suivant;
+        }*/
+        //printf("%d\n\n",nbRdV);
+        //listePat->listeRendezVous=debutRDV;
+
+        nbRdV = provided_compter_nb_Rdv_par_patient(listePat->id_pat,listePat);
+        //printf("%d\n\n",nbRdV);
+        fprintf(fptxt,"%d %d\n",listePat->id_pat,nbRdV);
+        for (int j = 0; j < nbRdV; j++)
+        {
+            fprintf(fptxt,"%d %d %d %d\n",listePat->listeRendezVous->id_soi,listePat->listeRendezVous->debut_affectee,listePat->listeRendezVous->fin_affectee,listePat->listeRendezVous->temps_deplacement);
+            listePat->listeRendezVous=listePat->listeRendezVous->suivant;
+        }
+        listePat=listePat->suivant;
+
+    }
+    
+
+    fclose(fptxt);
+
 }
+    
+    //return provided_exportSolution(solution, filename);
+
 
 
 
@@ -480,7 +572,7 @@ void menuPrincipal(void){
     ajouterRendezVous(listeRendezVousExemple,7,12,13,15,"Petit checkup du main");
     ajouterRendezVous(listeRendezVousExemple,8,34,33,16,"Visite");
     ajouterRendezVous(listeRendezVousExemple,9,45,56,17,"Visite");*/
-    
+
     //modifierRendezVous(listeRendezVous,7,22,23,15,"Modification RDV");
 
 
@@ -532,6 +624,7 @@ void menuPrincipal(void){
       switch(choix)
       {
          case 1:
+
 /*             printf(" Veuillez saisir le nom du fichier d'une instance ");
  *             scanf("%s",nomFichier);
  *             if (!(strcmp(nomFichier,"instance1.txt"))&&(!strcmp(nomFichier,"instance2.txt")))
@@ -540,11 +633,11 @@ void menuPrincipal(void){
  *                 exit(0);
  *             }
  */
-/*              unOrdonnancement = creerInstance("instance2.txt");
- *              T_Patient* listePatients = unOrdonnancement->listePatients;
- *              T_Soigneur* listeSoigneurs = unOrdonnancement->listeSoigneurs;
- *  
- */
+            unOrdonnancement = creerInstance("instance1.txt");
+            T_Patient* listePatients = unOrdonnancement->listePatients;
+            T_Soigneur* listeSoigneurs = unOrdonnancement->listeSoigneurs;
+
+ 
 
             break;
 
@@ -620,12 +713,13 @@ void menuPrincipal(void){
          case 7:
             //ordonnancer(unOrdonnancement); 
             //Test de affecterRdV
-              
+
             //rendezVousEnCours = chercher_RdV(patientExemple->listeRendezVous,7);
             affecterRdV(&rendezVousEnCours,7);
             break;
 
          case 8:
+            ExportSolution(unOrdonnancement, "solution.txt");
             break;
         
         case 9:
@@ -644,3 +738,7 @@ void menuPrincipal(void){
 //Ne pas oublier :
 //Arrêter d'afficher les éléments nuls dans les listes
 //Les rdv sont bizarres dans afficher patients
+
+
+
+
