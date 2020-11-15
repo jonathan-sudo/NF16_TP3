@@ -492,16 +492,19 @@ void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
         debutI = intervalle->debut;
         finI = intervalle->fin;
         if(rdv->debut_souhaitee >= debutI && rdv->fin_souhaitee <= finI){
+            printf("Le soigneur est disponible à l'intervalle demandé \n");
             debut_affectee = rdv->debut_souhaitee;
-            fin_affectee = rdv->debut_souhaitee;
+            fin_affectee = rdv->fin_souhaitee;
+            break;
         }
     }while(intervalle->suivant != NULL);
 
     printf("Coucou ça va?\n");
     //Si aucun intervalle ne permet d'avoir un rdv au moment souhaité, on affecte un rendez vous après le dernier rdv du soigneur
     if (debut_affectee == 0 && fin_affectee == 0){
+        printf("Aucun intervalle libre au moment souhaité. On affecte au dernier intervalle du soigneur \n");
         debut_affectee = intervalle->debut; 
-        fin_affectee = debut_affectee + rdv->fin_souhaitee - rdv->debut_souhaitee + rdv->temps_deplacement; 
+        fin_affectee = debut_affectee + rdv->fin_souhaitee - rdv->debut_souhaitee; 
     }
 
     printf("Coucou ça va?\n");
@@ -820,6 +823,7 @@ void menuPrincipal(void){
 
             //rendezVousEnCours = chercher_RdV(patientExemple->listeRendezVous,7);
             affecterRdV(rendezVous,listeSoigneurs);
+
             break;
 
          case 8:
