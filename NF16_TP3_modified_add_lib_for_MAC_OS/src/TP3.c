@@ -286,16 +286,19 @@ void affichage_Soigneurs(T_Soigneur* listeSoigneurs){
     //T_Intervalle* listeIntervallles=NULL;
     T_RendezVous* listeRdv=NULL;
     SoigneurEnCours = listeSoigneurs;
+    T_Intervalle *intervalleActuel = NULL;
     while (SoigneurEnCours!=NULL)
     {
         printf("ID soigneur: %d\n",SoigneurEnCours->id_soi);
         printf("Nom: %s\n",SoigneurEnCours->nom);
         printf("Prenom: %s\n",SoigneurEnCours->prenom);
         //listeIntervallles=SoigneurEnCours->listeIntervalle;
-        if(SoigneurEnCours->listeIntervalle!=NULL)
+        printf("Intervalles de temps disponible : \n"); 
+        intervalleActuel = SoigneurEnCours->listeIntervalle;
+        while(intervalleActuel != NULL)
         {
-            printf("Intervalle de temps disponible : [%d,%d[",SoigneurEnCours->listeIntervalle->debut,SoigneurEnCours->listeIntervalle->fin);
-
+            printf("[%d,%d]",intervalleActuel->debut,intervalleActuel->fin);
+            intervalleActuel = intervalleActuel->suivant;
         }
         
 /*         listeRdv = SoigneurEnCours->listeRendezVous;
@@ -511,14 +514,18 @@ void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
     //Modification de la liste d'intervalles de temps disponible du soigneur en fonction du rdv affecté
     if (debutI == debut_affectee ){
         if(finI == fin_affectee){
+            printf("Le rdv souhaité correspond parfaitement à un intervalle libre du soigneur, on supprime [%d,%d]\n",debutI,finI);
             supprimerIntervalle(&(soigneur->listeIntervalle),intervalle);
         } else {
             intervalle->debut = fin_affectee;
+            printf("Le rdv souhaité colle au début d'un intervalle libre du soigneur, on transforme [%d,%d] en [%d,%d]",debutI,finI,fin_affectee,finI);
+
         }
     } else {
         if(finI == fin_affectee){ //cas finI colle, debutI ne colle pas
             intervalle->fin = debut_affectee;
         } else {
+            printf("Cas milieu d'un intervalle disponible, on transforme [%d,%d] en [%d,%d] et on ajoute [%d,%d]\n",debutI,finI,debutI,debut_affectee,fin_affectee,finI);
             intervalle->fin = debut_affectee;
             ajouterIntervalle(&(soigneur->listeIntervalle),fin_affectee,finI);
         }
@@ -822,6 +829,7 @@ void menuPrincipal(void){
             //Test de affecterRdV
 
             //rendezVousEnCours = chercher_RdV(patientExemple->listeRendezVous,7);
+            //ajouterIntervalle(&(listeSoigneurs->listeIntervalle),100,200);
             affecterRdV(rendezVous,listeSoigneurs);
 
             break;
@@ -831,6 +839,7 @@ void menuPrincipal(void){
             break;
         
         case 9:
+
             break;        
 
         default:
