@@ -15,7 +15,6 @@ Date: 12/10/2020
  */
 T_Intervalle* ajouterIntervalle ( T_Intervalle** listeIntervalle, Time debut, Time fin )
 {
-    printf("Moi ça va j'ajoute des intervalles\n");
     if(*listeIntervalle == NULL){
         printf("Erreur: la liste d'intervalles disponibles est nulle");
         exit(EXIT_FAILURE);
@@ -26,7 +25,7 @@ T_Intervalle* ajouterIntervalle ( T_Intervalle** listeIntervalle, Time debut, Ti
 
     intervalle->suivant = *listeIntervalle;
     *listeIntervalle = intervalle;
-    printf("Oh il a été ajouté c'est trop bien\n");
+    printf("L'intervalle a bien été ajouté\n");
     return intervalle;
 }		/* -----  end of function ajouterIntervalle  ----- */
 
@@ -130,7 +129,7 @@ T_Soigneur* ajouterSoigneur(T_Soigneur** listeSoigneurs, Index_Soigneur idSoi, c
 
         soigneur->listeIntervalle=malloc(sizeof(T_Intervalle));
         soigneur->listeIntervalle->debut=0;
-        soigneur->listeIntervalle->fin=1440; // 24h
+        soigneur->listeIntervalle->fin=32700; // 24h
 
 
         soigneur->suivant = *listeSoigneurs;
@@ -480,18 +479,13 @@ T_Ordonnancement* creerInstance(char* filename){
  * @param soigneur un soigneur.
  */
 void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
-    printf("Coucou ça va?\n");
     printf("Soigneur %s:\n",soigneur->prenom);
-    printf("Coucou ça va?\n");
     Time debutI, finI, debut_affectee = 0, fin_affectee = 0;
 
     T_Intervalle* intervalle; 
-    printf("Coucou ça va?\n");
     intervalle = soigneur->listeIntervalle;
-    printf("Coucou ça va?\n");
     //On cherche un intervalle de temps disponible qui correspond à l'intervalle souhaité
     do{
-        printf("Coucou ça va?\n");
         debutI = intervalle->debut;
         finI = intervalle->fin;
         if(rdv->debut_souhaitee >= debutI && rdv->fin_souhaitee <= finI){
@@ -502,7 +496,6 @@ void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
         }
     }while(intervalle->suivant != NULL);
 
-    printf("Coucou ça va?\n");
     //Si aucun intervalle ne permet d'avoir un rdv au moment souhaité, on affecte un rendez vous après le dernier rdv du soigneur
     if (debut_affectee == 0 && fin_affectee == 0){
         printf("Aucun intervalle libre au moment souhaité. On affecte au dernier intervalle du soigneur \n");
@@ -510,7 +503,6 @@ void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
         fin_affectee = debut_affectee + rdv->fin_souhaitee - rdv->debut_souhaitee; 
     }
 
-    printf("Coucou ça va?\n");
     //Modification de la liste d'intervalles de temps disponible du soigneur en fonction du rdv affecté
     if (debutI == debut_affectee ){
         if(finI == fin_affectee){
@@ -534,7 +526,7 @@ void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
     //On modifie le rdv pour montrer qu'il a été affecté à un soigneur
     rdv->debut_affectee = debut_affectee;
     rdv->fin_affectee = fin_affectee;
-    rdv->id_soi = soigneur->id_soi;
+    //rdv->id_soi = soigneur->id_soi;
 
 
 }
@@ -549,7 +541,8 @@ void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
  * @param solution un instance
  */
 void ordonnancer(T_Ordonnancement* solution){
-     /*T_Patient* listePatients = solution->listePatients;
+
+    /*T_Patient* listePatients = solution->listePatients;
     while (listePatients!=NULL)
     {
         printf("%d\n\n",provided_sommeDeDurationRendezVous(listePatients));
@@ -557,10 +550,10 @@ void ordonnancer(T_Ordonnancement* solution){
 
     }*/
     
-    provided_MergeSort(&(solution->listePatients));
-    //return provided_ordonnancer(solution);
+    //provided_MergeSort(&(solution->listePatients));
+    return provided_ordonnancer(solution);
 
-    //return provided_ordonnancer(solution);
+
 }
 /**
  * @brief Exporter la solution d’un ordonnancement.
@@ -609,7 +602,7 @@ void ExportSolution(T_Ordonnancement* solution, char* filename)
         nbPat++;
         listePat=listePat->suivant;
     }
-    printf("%d\n\n",nbPat);
+    //printf("%d\n\n",nbPat);
 
     while (listeSoig->suivant!=NULL)
     {
@@ -661,6 +654,8 @@ void ExportSolution(T_Ordonnancement* solution, char* filename)
     
 
     fclose(fptxt);
+
+    printf("\nLa solution a bien été exportée\n");
 
 }
     
@@ -717,7 +712,7 @@ void menuPrincipal(void){
     Time dateFinSouhaitee;
     Time tempsDeplacement;
     char desc[125];
-
+    char rep[5];
 
     //printf("%s\n",chercher_Patient(listePatients)->nom); //Test de chercher_Patient
 
@@ -737,7 +732,8 @@ void menuPrincipal(void){
              "6: Supprimer un rendez-vous en indiquant l’identifiant du patient et celui du soigneur correspondant\n"
              "7: Ordonnancer\n"
              "8: Exporter la solution d’un ordonnancement\n"
-             "9: Quitter\n");
+             "9: Affecter rendez-vous (test)\n"
+             "10: Quitter\n");
  
       fflush(stdin);
       printf("\nVotre choix ? ");
@@ -746,15 +742,25 @@ void menuPrincipal(void){
       switch(choix)
       {
          case 1:
+            int OK = 0;
+        do
+        {
+            printf(" Veuillez saisir le nom du fichier d'une instance ");
+             scanf("%s",nomFichier);
+           if ((strcmp(nomFichier,"instance1.txt"))&&(strcmp(nomFichier,"instance2.txt")))
+             {
+                printf("Le fichier %s n'existe pas! Continuer? y ou n: ",nomFichier,rep);
+                scanf("%s",rep);
+            }
+            else
+            {
+                OK=1;
+            }
+            
+        } while (rep!="n" && OK==0);
+               
+           
 
-/*             printf(" Veuillez saisir le nom du fichier d'une instance ");
- *             scanf("%s",nomFichier);
- *             if (!(strcmp(nomFichier,"instance1.txt"))&&(!strcmp(nomFichier,"instance2.txt")))
- *             {
- *                 printf("Le fichier %s n'existe pas! Continuer? [y] n: ",nomFichier);
- *                 exit(0);
- *             }
- */
             unOrdonnancement = creerInstance("instance1.txt");
             T_Patient* listePatients = unOrdonnancement->listePatients;
             T_Soigneur* listeSoigneurs = unOrdonnancement->listeSoigneurs;
@@ -841,8 +847,9 @@ void menuPrincipal(void){
             //Test de affecterRdV
 
             //rendezVousEnCours = chercher_RdV(patientExemple->listeRendezVous,7);
+            //affecterRdV(rendezVous,listeSoigneurs);*
             //ajouterIntervalle(&(listeSoigneurs->listeIntervalle),100,200);
-            affecterRdV(rendezVous,listeSoigneurs);
+            //affecterRdV(rendezVous,listeSoigneurs);
 
             break;
 
@@ -851,13 +858,13 @@ void menuPrincipal(void){
             break;
         
         case 9:
-
+            affecterRdV(rendezVous,listeSoigneurs);
             break;        
 
         default:
             printf("Choix erroné\n");
       }
-   }while(choix!=9);
+   }while(choix!=10);
 
 
     //return provided_menu();
