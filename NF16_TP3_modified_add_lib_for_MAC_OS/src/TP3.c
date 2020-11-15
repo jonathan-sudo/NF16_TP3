@@ -66,16 +66,16 @@ void supprimerIntervalle (T_Intervalle** listeIntervalle,T_Intervalle* intervall
  *  Description:  
  * =====================================================================================
  */
-    T_RendezVous
-chercher_RdV ( T_RendezVous *listeRendezVous, Index_Soigneur idSoi )
+T_RendezVous* chercher_RdV ( T_RendezVous *listeRendezVous, Index_Soigneur idSoi )
 {
-    T_RendezVous rendezVousEnCours = *listeRendezVous;
-    while (rendezVousEnCours.suivant!=NULL){
-        if (rendezVousEnCours.id_soi == idSoi){
+    T_RendezVous *rendezVousEnCours = listeRendezVous;
+    while (rendezVousEnCours!=NULL){
+        if (rendezVousEnCours->id_soi == idSoi){
             return rendezVousEnCours;
         }
-        rendezVousEnCours = *rendezVousEnCours.suivant;
+        rendezVousEnCours = rendezVousEnCours->suivant;
     }
+    return NULL;
 }		/* -----  end of function chercher_RdV  ----- */
 
 
@@ -686,7 +686,7 @@ void menuPrincipal(void){
     Index_Patient idPat;
     Index_Soigneur idSoi;
     T_Patient *patient;
-    T_RendezVous rendezVousEnCours;
+    T_RendezVous *rendezVous;
     T_RendezVous *listeRendezVous = NULL;
     //affichage_Tous_RendezVous(chercher_Patient(listePatients)->listeRendezVous);
     
@@ -762,8 +762,12 @@ void menuPrincipal(void){
             printf("ID du soigneur?\n");
             scanf("%d",&idSoi);
 
-            rendezVousEnCours = chercher_RdV(patient->listeRendezVous,idSoi);
-            affichage_RendezVous(rendezVousEnCours);
+            rendezVous = chercher_RdV(patient->listeRendezVous,idSoi);
+            if (rendezVous == NULL) {
+                printf("Erreur: Le patient n'a pas de rendez vous avec le soigneur %d ou le soigneur %d n'existe pas\n",idSoi,idSoi);
+                break;
+            }       
+            affichage_RendezVous(*rendezVous);
             break;
 
          case 5:
@@ -815,7 +819,7 @@ void menuPrincipal(void){
             //Test de affecterRdV
 
             //rendezVousEnCours = chercher_RdV(patientExemple->listeRendezVous,7);
-            affecterRdV(&rendezVousEnCours,listeSoigneurs);
+            affecterRdV(rendezVous,listeSoigneurs);
             break;
 
          case 8:
