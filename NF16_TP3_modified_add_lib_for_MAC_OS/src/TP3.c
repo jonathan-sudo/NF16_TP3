@@ -549,7 +549,18 @@ void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
  * @param solution un instance
  */
 void ordonnancer(T_Ordonnancement* solution){
-    return provided_ordonnancer(solution);
+     /*T_Patient* listePatients = solution->listePatients;
+    while (listePatients!=NULL)
+    {
+        printf("%d\n\n",provided_sommeDeDurationRendezVous(listePatients));
+        listePatients = listePatients->suivant;
+
+    }*/
+    
+    provided_MergeSort(&(solution->listePatients));
+    //return provided_ordonnancer(solution);
+
+    //return provided_ordonnancer(solution);
 }
 /**
  * @brief Exporter la solution d’un ordonnancement.
