@@ -806,7 +806,7 @@ void menuPrincipal(void){
             //On cherche dans la liste de rendez vous du patient le rdv correspondant au soigneur demandé
             printf("ID du soigneur?\n");
             scanf("%d",&idSoi);
-            rendezVousEnCours = *supprimerRendezVous(patient->listeRendezVous,idSoi);
+            patient->listeRendezVous = supprimerRendezVous(patient->listeRendezVous,idSoi);
             affichage_Tous_RendezVous(patient->listeRendezVous);
             break;
 
@@ -838,6 +838,7 @@ void menuPrincipal(void){
 //Ne pas oublier :
 //Arrêter d'afficher les éléments nuls dans les listes
 //Les rdv sont bizarres dans afficher patients
+//Vérifier si les listes existent pour éviter les segmentation fault si aucune instance n'est chargée
 
 
 
