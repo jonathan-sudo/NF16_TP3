@@ -637,6 +637,7 @@ void ExportSolution(T_Ordonnancement* solution, char* filename)
 
         nbRdV = provided_compter_nb_Rdv_par_patient(listePat->id_pat,listePat);
         //printf("%d\n\n",nbRdV);
+        nbRdV--;
         fprintf(fptxt,"%d %d\n",listePat->id_pat,nbRdV);
         for (int j = 0; j < nbRdV; j++)
         {
