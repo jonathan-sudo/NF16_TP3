@@ -747,7 +747,7 @@ void menuPrincipal(void){
          case 1:
             do
         {
-            printf("\nVeuillez saisir le nom du fichier d'une instance ");
+            printf("\nVeuillez saisir le nom du fichier d'une instance : ");
             fflush(stdin);
              scanf("%s",nomFichier);
            if ((strcmp(nomFichier,"instance1.txt"))&&(strcmp(nomFichier,"instance2.txt")))
