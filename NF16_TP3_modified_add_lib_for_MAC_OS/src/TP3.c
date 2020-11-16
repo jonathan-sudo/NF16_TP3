@@ -698,6 +698,10 @@ void menuPrincipal(void){
     char nomFichier[20];
 
     int choix;
+    char *rep;
+    rep=malloc(sizeof(0));
+    int OK1 = 0;
+    int OK2 = 0;
 
     //Déclarations pour le case 4
     Index_Patient idPat;
@@ -742,31 +746,45 @@ void menuPrincipal(void){
       switch(choix)
       {
          case 1:
-            int OK = 0;
-        do
+            do
         {
-            printf(" Veuillez saisir le nom du fichier d'une instance ");
+            printf("\nVeuillez saisir le nom du fichier d'une instance ");
+            fflush(stdin);
              scanf("%s",nomFichier);
            if ((strcmp(nomFichier,"instance1.txt"))&&(strcmp(nomFichier,"instance2.txt")))
              {
-                printf("Le fichier %s n'existe pas! Continuer? y ou n: ",nomFichier,rep);
+                
+                printf("Le fichier %s n'existe pas!\n",nomFichier);
+                printf("Voulez-vous continuer ? (oui ou non) : ");
+                fflush(stdin);
                 scanf("%s",rep);
+                if (!strcmp(rep,"non"))
+                {
+                    OK2=1;
+                }
+                rep=malloc(0);
+
+                
+                
             }
             else
             {
-                OK=1;
+                OK1=1;
             }
             
-        } while (rep!="n" && OK==0);
+        } while (OK1==0 && OK2==0);
                
            
-
-            unOrdonnancement = creerInstance("instance1.txt");
+            if (OK1)
+            {
+                
+            unOrdonnancement = creerInstance(nomFichier);
             T_Patient* listePatients = unOrdonnancement->listePatients;
             T_Soigneur* listeSoigneurs = unOrdonnancement->listeSoigneurs;
-
- 
-
+            }
+            OK1=0;
+            OK2=0;
+              
             break;
 
          case 2:
