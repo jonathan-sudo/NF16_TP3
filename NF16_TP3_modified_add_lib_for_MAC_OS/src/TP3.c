@@ -716,7 +716,6 @@ void menuPrincipal(void){
     Time dateFinSouhaitee;
     Time tempsDeplacement;
     char desc[125];
-    char rep[5];
 
     //printf("%s\n",chercher_Patient(listePatients)->nom); //Test de chercher_Patient
 
