@@ -12,6 +12,7 @@ Date: 12/10/2020
 #include <time.h>
 #include <string.h>
 #include <stdbool.h>
+#include <math.h>
 //#include "../lib/libTP3_provided.so"
 // Définir le type d'identifiant d'un soigneur comme "unsigned int"
 typedef unsigned int Index_Soigneur;
