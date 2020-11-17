@@ -276,7 +276,7 @@ T_RendezVous* supprimerRendezVous(T_RendezVous* listeRdV, Index_Soigneur idSoi){
                  
                 }
                 rdvpred->suivant=rdvsucc->suivant;
-                printf("\n\nLe temps de déplacements du rendez-vous suivant associé à l'ID soignant %d a été mise à jour. Voir ci-dessous \n\n", rdvpred->id_soi);
+                printf("\n\nLe temps de déplacement du rendez-vous associé à l'ID soignant %d a été mise à jour. Voir ci-dessous \n\n", rdvpred->id_soi);
                 free(rdvsucc);
             }
         }
