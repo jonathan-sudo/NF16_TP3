@@ -17,6 +17,8 @@ string.h
 -
 stdbool.h
 -
+math.h
+-
 
 /home/jonathanl/NF16_TP3/NF16_TP3_modified_add_lib_for_MAC_OS/src/TP3.c
 ../include/TP3.h
