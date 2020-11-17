@@ -348,13 +348,16 @@ void affichage_Patients(T_Patient* listePatients){
    {
        printf("ID patient: %d\n",PatientEnCours->id_pat);
        printf("Nom: %s\n",PatientEnCours->nom);
-       printf("Prenom: %s\n",PatientEnCours->prenom);
+       printf("Prenom: %s\n\n",PatientEnCours->prenom);
        listeRdv = PatientEnCours->listeRendezVous;
-       if (listeRdv!=NULL)
+       printf("Liste des rendez-vous : \n\n");
+       while (listeRdv->suivant!=NULL) 
        {
            printf("Date de début affectée en minutes: %d\n",listeRdv->debut_affectee);
            printf("Date de fin affectée en minutes: %d\n",listeRdv->fin_affectee);
            printf("ID soignant: %d\n",listeRdv->id_soi);
+           listeRdv=listeRdv->suivant;
+           printf("\n");
        }
        PatientEnCours=PatientEnCours->suivant;
        printf("\n");
