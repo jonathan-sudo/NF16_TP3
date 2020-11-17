@@ -286,7 +286,7 @@ void affichage_Soigneurs(T_Soigneur* listeSoigneurs){
     T_RendezVous* listeRdv=NULL;
     SoigneurEnCours = listeSoigneurs;
     T_Intervalle *intervalleActuel = NULL;
-    while (SoigneurEnCours!=NULL)
+    while (SoigneurEnCours->suivant!=NULL)
     {
         printf("ID soigneur: %d\n",SoigneurEnCours->id_soi);
         printf("Nom: %s\n",SoigneurEnCours->nom);
@@ -323,7 +323,7 @@ void affichage_Patients(T_Patient* listePatients){
    T_Patient* PatientEnCours;
    T_RendezVous* listeRdv=NULL;
    PatientEnCours = listePatients;
-   while (PatientEnCours!=NULL)
+   while (PatientEnCours->suivant!=NULL)
    {
        printf("ID patient: %d\n",PatientEnCours->id_pat);
        printf("Nom: %s\n",PatientEnCours->nom);
@@ -361,7 +361,7 @@ void affichage_RendezVous(T_RendezVous rendezVous){
 
 void affichage_Tous_RendezVous(T_RendezVous *rendezVous){
 
-    while (rendezVous!=NULL)
+    while (rendezVous->suivant!=NULL)
     {
         printf("Desc : %s\n",rendezVous->desc);
         printf("id_soigneur_associé : %d \n",rendezVous->id_soi);
@@ -776,7 +776,6 @@ void menuPrincipal(void){
            
             if (OK1)
             {
-                
             unOrdonnancement = creerInstance(nomFichier);
             T_Patient* listePatients = unOrdonnancement->listePatients;
             T_Soigneur* listeSoigneurs = unOrdonnancement->listeSoigneurs;
@@ -787,15 +786,15 @@ void menuPrincipal(void){
             break;
 
          case 2:
-            affichage_Patients(listePatients);
+            affichage_Patients(unOrdonnancement->listePatients);
             break;
 
          case 3:
-            affichage_Soigneurs(listeSoigneurs);
+            affichage_Soigneurs(unOrdonnancement->listeSoigneurs);
             break;
 
          case 4:            
-            patient = chercher_Patient(listePatients);
+            patient = chercher_Patient(unOrdonnancement->listePatients);
             //printf("%s\n",patient->nom); //Test de chercher_Patient
             if (patient == NULL) {
                 printf("Erreur: Aucun patient ne correspond à cet ID\n");
@@ -816,7 +815,7 @@ void menuPrincipal(void){
             break;
 
          case 5:
-            patient = chercher_Patient(listePatients);
+            patient = chercher_Patient(unOrdonnancement->listePatients);
             if (patient == NULL) {
                 printf("Erreur: Aucun patient ne correspond à cet ID\n");
                 break;
@@ -845,7 +844,7 @@ void menuPrincipal(void){
             break;
 
          case 6:
-            patient = chercher_Patient(listePatients);
+            patient = chercher_Patient(unOrdonnancement->listePatients);
             if (patient == NULL) {
                 printf("Erreur: Aucun patient ne correspond à cet ID\n");
                 break;
@@ -875,8 +874,11 @@ void menuPrincipal(void){
             break;
         
         case 9:
-            affecterRdV(rendezVous,listeSoigneurs);
+            affecterRdV(rendezVous,unOrdonnancement->listeSoigneurs);
             break;        
+
+        case 10:
+            break;
 
         default:
             printf("Choix erroné\n");
