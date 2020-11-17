@@ -265,7 +265,41 @@ T_RendezVous* supprimerRendezVous(T_RendezVous* listeRdV, Index_Soigneur idSoi){
             
             else
             {
+                //rdvpred->suivant=rdvsucc->suivant;
+                /*Time newTempsDeplacement;
+                T_RendezVous* temp=rdvsucc->suivant;
+                printf("COucou");
+                if (rdvsucc->suivant!=NULL)
+                {
+                    //temp = rdvsucc->suivant;
+                    printf("COucou");
+                    newTempsDeplacement = sqrt(pow(rdvsucc->temps_deplacement,2)+pow(rdvsucc->suivant->temps_deplacement,2));
+                    printf("\nNew Temps : %d\n",newTempsDeplacement);
+                    temp = rdvsucc->suivant;
+                    modifierRendezVous(&temp,temp->id_soi,temp->debut_souhaitee,temp->fin_affectee,newTempsDeplacement,temp->desc);
+                    //rdvpred->suivant=temp;
+                }
+                rdvpred->suivant=temp;
+                free(rdvsucc);*/
+
+                Time newTempsDeplacement;
+                //T_RendezVous* temp;
+                //printf("COucou");
+                if (rdvsucc->suivant!=NULL)
+                {
+                    //temp = rdvsucc->suivant;
+                    //printf("COucou");
+                    newTempsDeplacement = sqrt(pow(rdvpred->temps_deplacement,2)+pow(rdvpred->suivant->temps_deplacement,2));
+                    //printf("\nNew Temps : %d\n",newTempsDeplacement);
+                    //temp = rdvpred;
+                    //printf("\nId : %d\n",rdvpred->id_soi);
+                    //printf("\nCoucou\n");
+                    //printf("\Temps : %d\n",rdvpred->temps_deplacement);
+                    modifierRendezVous(rdvpred,rdvpred->id_soi,rdvpred->debut_souhaitee,rdvpred->fin_souhaitee,newTempsDeplacement,rdvpred->desc);
+                    //rdvpred->suivant=temp;
+                }
                 rdvpred->suivant=rdvsucc->suivant;
+                printf("\n\nLe temps de déplacements du rendez-vous suivant associé à l'ID soignant %d a été mise à jour. Voir ci-dessous \n\n", rdvpred->id_soi);
                 free(rdvsucc);
             }
         }
