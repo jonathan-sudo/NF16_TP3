@@ -16,6 +16,6 @@ file(COPY ${CMAKE_SOURCE_DIR}/lib/libTP3_provided.dylib DESTINATION ${EXECUTABLE
 # for mingw (GNU GCC) under windows
 # target_link_libraries(TP3 ${CMAKE_SOURCE_DIR}/lib/libTP3_provided.dll)
 ## if in unix-like, e.g, ubuntu, please comment the one for windows and MAC OS, and activate the following instruction.
-target_link_libraries(TP3 ${CMAKE_SOURCE_DIR}/lib/libTP3_provided.so)
+target_link_libraries(TP3 m ${CMAKE_SOURCE_DIR}/lib/libTP3_provided.so)
 ## if in MAC OS, please comment the one for windows and ubuntu, and activate the following instruction.
 # target_link_libraries(TP3 ${CMAKE_SOURCE_DIR}/lib/libTP3_provided.dylib)
