@@ -517,8 +517,8 @@ void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
             debut_affectee = rdv->debut_souhaitee;
             fin_affectee = rdv->fin_souhaitee;
             break;
-            intervalle = intervalle->suivant;
         }
+        intervalle = intervalle->suivant;
     }while(intervalle != NULL);
 
     //Si aucun intervalle ne permet d'avoir un rdv au moment souhaité, on affecte un rdv à l'intervalle de longueur adaptée le plus proche possible
@@ -529,8 +529,8 @@ void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
         do{
             debutI = intervalle->debut;
             finI = intervalle->fin;
-            if(finI-debutI >= rdv->fin_souhaitee - rdv->debut_souhaitee ){
-                printf("Le soigneur est libre à l'intervalle [%d,%d]",finI,debutI);
+            if(finI-debutI >= rdv->fin_souhaitee - rdv->debut_souhaitee && debutI >= rdv->debut_souhaitee){
+                printf("Le soigneur est libre à l'intervalle [%d,%d]\n",debutI,finI);
                 debut_affectee = rdv->debut_souhaitee;
                 fin_affectee = rdv->fin_souhaitee;
                 break;
@@ -541,6 +541,7 @@ void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
         debut_affectee = intervalle->debut; 
         fin_affectee = debut_affectee + rdv->fin_souhaitee - rdv->debut_souhaitee; 
     }
+
 
     //Modification de la liste d'intervalles de temps disponible du soigneur en fonction du rdv affecté
     if (debutI == debut_affectee ){
