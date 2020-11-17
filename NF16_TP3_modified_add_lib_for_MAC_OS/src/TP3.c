@@ -13,7 +13,7 @@ Date: 12/10/2020
  *  Description:  
  * =====================================================================================
  */
-T_Intervalle* ajouterIntervalle ( T_Intervalle** listeIntervalle, Time debut, Time fin, T_Intervalle* intervallePrécédent )
+T_Intervalle* ajouterIntervalle ( T_Intervalle** listeIntervalle, Time debut, Time fin, T_Intervalle* intervallePrecedent )
 {
     if(*listeIntervalle == NULL){
         printf("Erreur: la liste d'intervalles disponibles est nulle");
@@ -24,7 +24,7 @@ T_Intervalle* ajouterIntervalle ( T_Intervalle** listeIntervalle, Time debut, Ti
     intervalle->fin = fin;
     T_Intervalle *iteration = *listeIntervalle;
     while(iteration != NULL){
-        if(iteration==intervallePrécédent) break;
+        if(iteration==intervallePrecedent) break;
         iteration = iteration->suivant;
     }
     if(iteration==NULL){
@@ -33,8 +33,8 @@ T_Intervalle* ajouterIntervalle ( T_Intervalle** listeIntervalle, Time debut, Ti
     }
 
 
-    intervalle->suivant = intervallePrécédent->suivant;
-    intervallePrécédent->suivant = intervalle;
+    intervalle->suivant = intervallePrecedent->suivant;
+    intervallePrecedent->suivant = intervalle;
     printf("L'intervalle a bien été ajouté\n");
     return intervalle;
 }		/* -----  end of function ajouterIntervalle  ----- */
@@ -514,8 +514,9 @@ void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
             debut_affectee = rdv->debut_souhaitee;
             fin_affectee = rdv->fin_souhaitee;
             break;
+            intervalle = intervalle->suivant;
         }
-    }while(intervalle->suivant != NULL);
+    }while(intervalle != NULL);
 
     //Si aucun intervalle ne permet d'avoir un rdv au moment souhaité, on affecte un rdv à l'intervalle de longueur adaptée le plus proche possible
     if (debut_affectee == 0 && fin_affectee == 0){
@@ -523,14 +524,16 @@ void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
         intervalle = soigneur->listeIntervalle;
 
         do{
-        debutI = intervalle->debut;
-        finI = intervalle->fin;
-        if(finI-debutI <= rdv->debut_souhaitee - rdv->fin_souhaitee){
-            debut_affectee = rdv->debut_souhaitee;
-            fin_affectee = rdv->fin_souhaitee;
-            break;
-        }
-    }while(intervalle->suivant != NULL);
+            debutI = intervalle->debut;
+            finI = intervalle->fin;
+            if(finI-debutI >= rdv->fin_souhaitee - rdv->debut_souhaitee ){
+                printf("Le soigneur est libre à l'intervalle [%d,%d]",finI,debutI);
+                debut_affectee = rdv->debut_souhaitee;
+                fin_affectee = rdv->fin_souhaitee;
+                break;
+            }
+            intervalle = intervalle->suivant;
+        }while(intervalle != NULL);
 
         debut_affectee = intervalle->debut; 
         fin_affectee = debut_affectee + rdv->fin_souhaitee - rdv->debut_souhaitee; 
@@ -908,7 +911,7 @@ void menuPrincipal(void){
             break;
         
         case 9:
-            affecterRdV(rendezVous,unOrdonnancement->listeSoigneurs);
+            affecterRdV(rendezVous,unOrdonnancement->listeSoigneurs->suivant);
             break;        
 
         case 10:
