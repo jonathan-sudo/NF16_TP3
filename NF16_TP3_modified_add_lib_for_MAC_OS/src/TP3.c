@@ -118,6 +118,18 @@ T_Patient* chercher_Patient (T_Patient* listePatients )
 }		/* -----  end of function chercher_Patient  ----- */
 
 
+T_Soigneur* chercher_Soigneur ( T_Soigneur *listeSoigneurs, Index_Soigneur idSoi )
+{
+    T_Soigneur *soigneurEnCours = listeSoigneurs;
+    while (soigneurEnCours!=NULL){
+        if (soigneurEnCours->id_soi == idSoi){
+            return soigneurEnCours;
+        }
+        soigneurEnCours = soigneurEnCours->suivant;
+    }
+    return NULL;
+}		
+
 
 /**
  * @brief Ajout d’un soigneur, où la liste des intervalles de temps disponibles pour un nouveau soigneur
@@ -546,19 +558,20 @@ void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
     //Modification de la liste d'intervalles de temps disponible du soigneur en fonction du rdv affecté
     if (debutI == debut_affectee ){
         if(finI == fin_affectee){
-            printf("Le rdv affecté correspond parfaitement à un intervalle libre du soigneur, on supprime [%d,%d]\n",debutI,finI);
+            printf("Le rdv affecté correspond parfaitement à un intervalle libre du soigneur, on supprime [%d,%d]\n\n",debutI,finI);
             supprimerIntervalle(&(soigneur->listeIntervalle),intervalle);
         } else {
             intervalle->debut = fin_affectee;
-            printf("Le rdv affecté colle au début d'un intervalle libre du soigneur, on transforme [%d,%d] en [%d,%d]",debutI,finI,fin_affectee,finI);
+            printf("Le rdv affecté colle au début d'un intervalle libre du soigneur, on transforme [%d,%d] en [%d,%d]\n\n",debutI,finI,fin_affectee,finI);
 
         }
     } else {
         if(finI == fin_affectee){ //cas finI colle, debutI ne colle pas
             intervalle->fin = debut_affectee;
         } else {
-            printf("Cas milieu d'un intervalle disponible, on transforme [%d,%d] en [%d,%d] et on ajoute [%d,%d]\n",debutI,finI,debutI,debut_affectee,fin_affectee,finI);
+            printf("Cas milieu d'un intervalle disponible, on transforme [%d,%d] en [%d,%d] et on ajoute [%d,%d]\n\n",debutI,finI,debutI,debut_affectee,fin_affectee,finI);
             ajouterIntervalle(&(soigneur->listeIntervalle),fin_affectee,finI,intervalle);
+            printf("\n");
             intervalle->fin = debut_affectee;
 
         }
@@ -583,19 +596,30 @@ void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
  */
 void ordonnancer(T_Ordonnancement* solution){
 
-    /*T_Patient* listePatients = solution->listePatients;
-    while (listePatients!=NULL)
+    T_Patient *patientEnCours=solution->listePatients;
+    T_RendezVous *rendezVousEnCours;
+    T_Soigneur* soigneur;
+    provided_MergeSort(&patientEnCours);
+    printf("Liste triée\n");
+    while (patientEnCours->suivant!=NULL)
     {
-        printf("%d\n\n",provided_sommeDeDurationRendezVous(listePatients));
-        listePatients = listePatients->suivant;
+        rendezVousEnCours=patientEnCours->listeRendezVous;
 
-    }*/
-    
-    //provided_MergeSort(&(solution->listePatients));
-    return provided_ordonnancer(solution);
-
-
+        while (rendezVousEnCours->suivant!=NULL)
+        {
+            //printf("Temps depla : %d\n",patientEnCours->listeRendezVous->temps_deplacement);
+            soigneur=chercher_Soigneur (solution->listeSoigneurs,rendezVousEnCours->id_soi);
+            affecterRdV(rendezVousEnCours,soigneur);
+            rendezVousEnCours=rendezVousEnCours->suivant;
+        }
+        
+        patientEnCours=patientEnCours->suivant;
+    }
+    //solution->listePatients=listePatients;
+    //return provided_ordonnancer(solution);
 }
+
+
 /**
  * @brief Exporter la solution d’un ordonnancement.
  * Le nom du fichier exporté a sufix de la date de création  d’un ordonnancement, par exemple filename=’solution.txt’,
@@ -900,7 +924,7 @@ void menuPrincipal(void){
             break;
 
          case 7:
-            //ordonnancer(unOrdonnancement); 
+            ordonnancer(unOrdonnancement); 
             //Test de affecterRdV
 
             //rendezVousEnCours = chercher_RdV(patientExemple->listeRendezVous,7);
