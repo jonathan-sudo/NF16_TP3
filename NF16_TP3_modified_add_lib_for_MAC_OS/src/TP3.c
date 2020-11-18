@@ -52,18 +52,23 @@ void supprimerIntervalle (T_Intervalle** listeIntervalle,T_Intervalle* intervall
     printf("Moi ça va je supprime des intervalles\n");
     T_Intervalle* intervalleActuel = *listeIntervalle;
 
-    if(*listeIntervalle == NULL){
-        printf("Erreur dans supprimerIntervalle: la liste d'intervalles disponibles est nulle ou l'intervalle à supprimer n'existe pas");
+    if(*listeIntervalle == NULL || intervalle == NULL){
+        printf("Erreur dans supprimerIntervalle: la liste d'intervalles disponibles est nulle ou l'intervalle à supprimer n'existe pas\n");
         exit(EXIT_FAILURE);
     }
 
-    while(intervalleActuel->suivant != NULL){
+    while(intervalleActuel != NULL){
         if(intervalleActuel->suivant == intervalle ){
             intervalleActuel->suivant = intervalle->suivant;
             free(intervalle);
             printf("L'intervalle a été supprimé\n");
             break;
         }
+        intervalleActuel = intervalleActuel->suivant;
+    }
+    if(intervalleActuel == NULL){
+        printf("Erreur dans supprimerIntervalle: l'intervalle à supprimer n'est pas dans la liste\n");
+        exit(EXIT_FAILURE);
     }
 
 }		/* -----  end of function supprimerIntervalle  ----- */
@@ -800,8 +805,7 @@ void menuPrincipal(void){
              "6: Supprimer un rendez-vous en indiquant l’identifiant du patient et celui du soigneur correspondant\n"
              "7: Ordonnancer\n"
              "8: Exporter la solution d’un ordonnancement\n"
-             "9: Affecter rendez-vous (test)\n"
-             "10: Quitter\n");
+             "9: Quitter\n");
  
       fflush(stdin);
       printf("\nVotre choix ? ");
@@ -937,18 +941,14 @@ void menuPrincipal(void){
          case 8:
             ExportSolution(unOrdonnancement, "solution.txt");
             break;
-        
-        case 9:
-            affecterRdV(rendezVous,unOrdonnancement->listeSoigneurs->suivant);
-            break;        
 
-        case 10:
+         case 9:
             break;
 
-        default:
+         default:
             printf("Choix erroné\n");
       }
-   }while(choix!=10);
+    }while(choix!=9);
 
 
     //return provided_menu();
