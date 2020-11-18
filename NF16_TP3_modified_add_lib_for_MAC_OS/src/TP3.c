@@ -156,7 +156,7 @@ T_Soigneur* ajouterSoigneur(T_Soigneur** listeSoigneurs, Index_Soigneur idSoi, c
 
         soigneur->listeIntervalle=malloc(sizeof(T_Intervalle));
         soigneur->listeIntervalle->debut=0;
-        soigneur->listeIntervalle->fin=32700; // 24h
+        soigneur->listeIntervalle->fin=32700;
 
 
         soigneur->suivant = *listeSoigneurs;
@@ -320,7 +320,6 @@ T_RendezVous* supprimerRendezVous(T_RendezVous* listeRdV, Index_Soigneur idSoi){
  */
 void affichage_Soigneurs(T_Soigneur* listeSoigneurs){
     T_Soigneur* SoigneurEnCours;
-    //T_Intervalle* listeIntervallles=NULL;
     T_RendezVous* listeRdv=NULL;
     SoigneurEnCours = listeSoigneurs;
     T_Intervalle *intervalleActuel = NULL;
@@ -329,7 +328,6 @@ void affichage_Soigneurs(T_Soigneur* listeSoigneurs){
         printf("ID soigneur: %d\n",SoigneurEnCours->id_soi);
         printf("Nom: %s\n",SoigneurEnCours->nom);
         printf("Prenom: %s\n",SoigneurEnCours->prenom);
-        //listeIntervallles=SoigneurEnCours->listeIntervalle;
         printf("Intervalles de temps disponible : \n"); 
         intervalleActuel = SoigneurEnCours->listeIntervalle;
         while(intervalleActuel != NULL)
@@ -338,14 +336,6 @@ void affichage_Soigneurs(T_Soigneur* listeSoigneurs){
             intervalleActuel = intervalleActuel->suivant;
         }
         
-/*         listeRdv = SoigneurEnCours->listeRendezVous;
- *         if (listeRdv!=NULL)
- *         {
- *             printf("Date de début affectée en minutes: %d\n ",listeRdv->debut_affectee);
- *             printf("Date de fin affectée en minutes: %d\n",listeRdv->fin_affectee);
- *             printf("ID soignant: %d\n",listeRdv->id_soi);
- *         }
- */
         SoigneurEnCours=SoigneurEnCours->suivant;
         printf("\n\n");
     }
@@ -453,19 +443,15 @@ T_Ordonnancement* creerInstance(char* filename){
     {
         printf("\n");
         fscanf(fptxt,"%d %d\n",&nbPatient,&nbSoignant);
-        //printf("%d %d\n",nbPatient,nbSoignant);
         for (int i = 0; i < nbPatient; i++)
         {
             fscanf(fptxt,"%d %d %s %s\n",&idpat,&nbRdv,nom,prenom);
-            //printf("%u %d %s %s\n",idpat,nbRdv,nom,prenom);
             printf("\n");
             ajouterPatient(&listePatientsO,idpat,nom,prenom);
             
             for (int j = 0; j < nbRdv; j++)
             {
                 fscanf(fptxt,"%d %d %d %d %s\n",&idsoigneur,&interinf,&intersup,&tdepl,desc);
-                //printf("%d %d %d %d %s\n",idsoigneur,interinf,intersup,tdepl,desc);
-                //printf("\n");
                 ajouterRendezVous(&(listePatientsO->listeRendezVous),idsoigneur,interinf,intersup,tdepl,desc);
                 desc=malloc(0);
             }
@@ -484,7 +470,6 @@ T_Ordonnancement* creerInstance(char* filename){
             
             fscanf(fptxt,"%d %s %s\n",&idsoigneur,nom,prenom);
             printf("\n");
-            //printf("%d %s %s\n",&idsoigneur,nom,prenom);
             ajouterSoigneur(&listeSoigneursO,idsoigneur,nom,prenom);
             nom=malloc(0);
             prenom=malloc(0);
@@ -585,7 +570,6 @@ void affecterRdV(T_RendezVous* rdv, T_Soigneur* soigneur){
     //On modifie le rdv pour montrer qu'il a été affecté à un soigneur
     rdv->debut_affectee = debut_affectee;
     rdv->fin_affectee = fin_affectee;
-    //rdv->id_soi = soigneur->id_soi;
 
 
 }
@@ -612,7 +596,6 @@ void ordonnancer(T_Ordonnancement* solution){
 
         while (rendezVousEnCours->suivant!=NULL)
         {
-            //printf("Temps depla : %d\n",patientEnCours->listeRendezVous->temps_deplacement);
             soigneur=chercher_Soigneur (solution->listeSoigneurs,rendezVousEnCours->id_soi);
             affecterRdV(rendezVousEnCours,soigneur);
             rendezVousEnCours=rendezVousEnCours->suivant;
@@ -620,7 +603,6 @@ void ordonnancer(T_Ordonnancement* solution){
         
         patientEnCours=patientEnCours->suivant;
     }
-    //solution->listePatients=listePatients;
     //return provided_ordonnancer(solution);
 }
 
@@ -639,7 +621,6 @@ void ExportSolution(T_Ordonnancement* solution, char* filename)
 
     T_Patient* listePat = solution->listePatients;
     T_Soigneur* listeSoig = solution->listeSoigneurs;
-    //T_RendezVous* listeRdV = solution->listePatients->listeRendezVous;
 
 
     int nbPat=0, nbSoig = 0, nbRdV = 0;
@@ -650,14 +631,7 @@ void ExportSolution(T_Ordonnancement* solution, char* filename)
     char point[] =".";
     char ext [] =".txt";
 
-    /*strcat(finalfilename,filename);
-    printf("%s\n\n",finalfilename);
-    strcat(finalfilename,point);
-    printf("%s\n\n",finalfilename);    
-    strcat(finalfilename,solution->date);
-    printf("%s\n\n",finalfilename);
-    strcat(finalfilename,ext);*/
-
+    
     snprintf( finalfilename, sizeof( finalfilename ), "%s%s%s%s", filename,point,solution->date, ext);
 
     fptxt=fopen(finalfilename,"w");
@@ -672,7 +646,6 @@ void ExportSolution(T_Ordonnancement* solution, char* filename)
         nbPat++;
         listePat=listePat->suivant;
     }
-    //printf("%d\n\n",nbPat);
 
     while (listeSoig->suivant!=NULL)
     {
@@ -681,36 +654,18 @@ void ExportSolution(T_Ordonnancement* solution, char* filename)
 
     }
 
-    /*while (listeRdV!=NULL)
-    {
-        nbRdV++;
-        listeRdV=listeRdV->suivant;
-
-    }*/
-
+  
     listePat = solution->listePatients;
     listeSoig = solution->listeSoigneurs;
     listePat->listeRendezVous=solution->listePatients->listeRendezVous;
-    //printf("%d\n\n",listePat->listeRendezVous->id_soi);
-    //listeRdV = solution->listePatients->listeRendezVous;
     T_RendezVous* debutRDV=NULL;
 
-    // pas besoin de retourner au début car les premier élément insérer à partir du fichier se trouve a la fin des listes
 
     fprintf(fptxt,"%d %d\n",nbPat,nbSoig);
     for (int i = 0; i < nbPat; i++)
     {   
-        //debutRDV = listePat->listeRendezVous;
-       /*while (listePat->listeRendezVous->suivant!=NULL)
-        {
-            nbRdV++;
-            listePat->listeRendezVous=listePat->listeRendezVous->suivant;
-        }*/
-        //printf("%d\n\n",nbRdV);
-        //listePat->listeRendezVous=debutRDV;
-
+       
         nbRdV = provided_compter_nb_Rdv_par_patient(listePat->id_pat,listePat);
-        //printf("%d\n\n",nbRdV);
         nbRdV--;
         fprintf(fptxt,"%d %d\n",listePat->id_pat,nbRdV);
         for (int j = 0; j < nbRdV; j++)
@@ -779,7 +734,6 @@ void menuPrincipal(void){
     T_Patient *patient;
     T_RendezVous *rendezVous;
     T_RendezVous *listeRendezVous = NULL;
-    //affichage_Tous_RendezVous(chercher_Patient(listePatients)->listeRendezVous);
     
     //Déclarations pour le case 5
     Time dateDebutSouhaitee;
@@ -787,7 +741,6 @@ void menuPrincipal(void){
     Time tempsDeplacement;
     char desc[125];
 
-    //printf("%s\n",chercher_Patient(listePatients)->nom); //Test de chercher_Patient
 
     do
     {
@@ -845,9 +798,9 @@ void menuPrincipal(void){
            
             if (OK1)
             {
-            unOrdonnancement = creerInstance(nomFichier);
-            T_Patient* listePatients = unOrdonnancement->listePatients;
-            T_Soigneur* listeSoigneurs = unOrdonnancement->listeSoigneurs;
+                unOrdonnancement = creerInstance(nomFichier);
+                T_Patient* listePatients = unOrdonnancement->listePatients;
+                T_Soigneur* listeSoigneurs = unOrdonnancement->listeSoigneurs;
             }
             OK1=0;
             OK2=0;
@@ -864,7 +817,6 @@ void menuPrincipal(void){
 
          case 4:            
             patient = chercher_Patient(unOrdonnancement->listePatients);
-            //printf("%s\n",patient->nom); //Test de chercher_Patient
             if (patient == NULL) {
                 printf("Erreur: Aucun patient ne correspond à cet ID\n");
                 break;
@@ -929,12 +881,6 @@ void menuPrincipal(void){
 
          case 7:
             ordonnancer(unOrdonnancement); 
-            //Test de affecterRdV
-
-            //rendezVousEnCours = chercher_RdV(patientExemple->listeRendezVous,7);
-            //affecterRdV(rendezVous,listeSoigneurs);*
-            //ajouterIntervalle(&(listeSoigneurs->listeIntervalle),100,200);
-            //affecterRdV(rendezVous,listeSoigneurs);
 
             break;
 
@@ -950,15 +896,9 @@ void menuPrincipal(void){
       }
     }while(choix!=9);
 
-
     //return provided_menu();
 }
 
-
-//Ne pas oublier :
-//Arrêter d'afficher les éléments nuls dans les listes
-//Les rdv sont bizarres dans afficher patients
-//Vérifier si les listes existent pour éviter les segmentation fault si aucune instance n'est chargée
 
 
 
